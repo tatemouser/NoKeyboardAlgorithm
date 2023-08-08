@@ -2,6 +2,7 @@ package main;
 
 public class Index {
 	public static void main(String[] args) {
+		// Testing
 	/*	WordToNumConversion words = new WordToNumConversion();
 		words.convert("qaz"); 
 		words.convert("wsx"); 
