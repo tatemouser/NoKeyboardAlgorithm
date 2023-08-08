@@ -1,5 +1,7 @@
 package main;
 
+import testing.*;
+
 public class Index {
 	public static void main(String[] args) {
 		// Testing
@@ -15,7 +17,11 @@ public class Index {
 		
 		WordToNumConversion words = new WordToNumConversion();
 		NumToWordConversion number = new NumToWordConversion();
+		
 		number.run("73999"); // hello is the correct case in the tree
+		
+		TrieToCSV.writeToCSV(number.getTree(), number.getTree().getRoot(), "", "trieWordData.csv");
+		
 	/*	hello
 		73999
 		Level 1: 6 options
