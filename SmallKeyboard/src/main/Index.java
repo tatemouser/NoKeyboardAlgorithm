@@ -11,16 +11,19 @@ public class Index {
 	private static Trie wordBank;
 	private static String[] wordCombinations;
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
-
-	public static void main(String[] args) {
-		// printLetterToNumber();
-		// Converting from a word to number for the sake of testing. Typically the program would bypass this step and take in numbers.
-		WordToNum words = new WordToNum();
-		
-		// String input = words.convert("innovative and");
-		//String input = words.convert("absolutely great"); 
-		String input = words.convert("i want to"); 
-
+	
+	public static void printWordMatches() {
+		// Each row printed are the possible combinations available.
+		for(ArrayList<String> temp: wordMatches) {
+			String str = "";
+			for(int i = 0; i < temp.size(); i++) {
+				str += temp.get(i) + " ";
+			}
+			System.out.println(str);
+		}
+	}
+	
+	public static void findAndAddMatches(String input) {
 		String currentWord = "";
 		// Iterate input and add results to final output.
 		for(int i = 0; i < input.length(); i++) {
@@ -33,51 +36,7 @@ public class Index {
 		        currentWord = "";
 		    }
 		}	
-		
-		// Each row printed are the possible combinations available.
-		for(ArrayList<String> temp: wordMatches) {
-			String str = "";
-			for(int i = 0; i < temp.size(); i++) {
-				str += temp.get(i) + " ";
-			}
-			System.out.println(str);
-		}
-		
-		// Initialize and train model with data set.
-		BigramMain bigramMain = new BigramMain();
-		
-		//BigramMain.exampleSet();
-		//BigramMain.getAfterWord();
-		//BigramMain.getPriorWord();
-		//BigramMain.getCenterWord();
-		
-		ArrayList<ArrayList<String>> temp1 = new ArrayList<>();
-        ArrayList<String> temp2 = new ArrayList<String>() {{
-            add("are");
-            add("aae");
-            add("arr");
-            add("rrr");
-            add("aaa");
-            add("rea");
-        }};		
-        ArrayList<String> temp3 = new ArrayList<String>() {{
-            add("sure");
-            add("ssre");
-            add("ssse");
-            add("ssss");
-            add("ssee");
-            add("tres");
-        }};	
-        temp1.add(temp2);
-		temp1.add(temp3);
-		String result = BigramMain.getCenterWord("you", temp1);
-		BigramMain.printWordsNotFound();
-		
-		System.out.println("Final Result:" + result);
-		
 	}
-	
-	
 	
 	// Creates trie of possible words -> Puts trie in array -> Creates dictionary -> Calls findMatches to compare dictionary with array 
 	public static void getWord(String input) {
@@ -124,5 +83,57 @@ public class Index {
 		words.convert("ik"); 
 		words.convert("ol"); 
 		words.convert("p");
+	}
+	
+	public static void main(String[] args) {
+		// printLetterToNumber();
+		// Converting from a word to number for the sake of testing. Typically the program would bypass this step and take in numbers.
+		WordToNum words = new WordToNum();
+
+		String input = words.convert("i want to"); 
+		
+		findAndAddMatches(input);
+		printWordMatches();
+		
+		
+		/*
+		// Initialize and train model with data set.
+		BigramMain bigramMain = new BigramMain();
+		//BigramMain.getAfterWord();
+		//BigramMain.getPriorWord();
+		//BigramMain.getCenterWord();
+		
+		ArrayList<Double> totalSetMatchScoring = new ArrayList<>();
+		String result = "";
+		for(int i = 0; i < wordMatches.size(); i++) {
+			// Search Right Only (first set)
+			if(i == 0) {
+				ArrayList<String> baseWord = wordMatches.get(0); // Assuming 1 option. 
+				ArrayList<String> options = wordMatches.get(1);
+				result += BigramMain.getAfterWord(baseWord.get(0), options) + " ";
+				
+			// Search Left Only (last set)
+			} else if(i == wordMatches.size()-1) {
+				ArrayList<String> baseWord = wordMatches.get(2); // Assuming 1 option. 
+				ArrayList<String> options = wordMatches.get(1);
+				result += BigramMain.getPriorWord(baseWord.get(0), options) + " ";
+				
+			// Cross Search 
+			} else {
+				ArrayList<String> baseWord = wordMatches.get(1); // Assuming 1 option.
+				
+				ArrayList<String> leftOptions = wordMatches.get(0);
+				ArrayList<String> rightOptions = wordMatches.get(2);
+				ArrayList<ArrayList<String>> options = new ArrayList<>();
+				options.add(leftOptions);
+				options.add(rightOptions);
+				
+				result += BigramMain.getCenterWord(baseWord.get(0), options);
+			}
+			
+		}*/
+		// BigramMain.printWordsNotFound();
+		
+		
 	}
 }
