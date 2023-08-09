@@ -3,13 +3,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-// replit https://www.youtube.com/watch?v=7bf5EdQONTM
-public class BigramMain {
+// Credit: Dr.Greg Durrett (Created original outline for language model)
+// Source: https://www.youtube.com/watch?v=7bf5EdQONTM
 
+public class BigramMain {
+  public static BigramLanguageModel lm;
   static Random r = new Random();
 
   public static List<List<String>> readWikitext(String path, int maxLines) {
-    System.out.println("Started reading from file " + path);
+    System.out.println("Reading and training has started:  Using " + path);
     List<List<String>> lines = new ArrayList<List<String>>();
     BufferedReader reader;
     try {
@@ -36,7 +38,7 @@ public class BigramMain {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    System.out.println("Read " + lines.size() + " lines");
+    System.out.println("Training Complete: Read " + lines.size() + " lines");
     return lines;
   }
 
@@ -45,9 +47,11 @@ public class BigramMain {
    * @param lm
    */
   public static void checkNormalization(BigramLanguageModel lm) {
+	System.out.println("Testing Started-----------------------------------");
     checkNormalization(lm, "the");
     checkNormalization(lm, "asked");
     checkNormalization(lm, "did");
+    System.out.println("Testing Complete-----------------------------------");
   }
 
   /**
@@ -97,7 +101,7 @@ public class BigramMain {
    * Value printed closest to 1 is the word most likely to follow. Non-existing words will be labeled as "not-found".
    * @param lm
    */
-  public static void getWordProbabilites(BigramLanguageModel lm) {
+  public static void exampleSet() {
 	  /* 
 		Original String - "innovative and" - Generated "innovative" "aye" "and" "ane".
 		One selection for first word - innovative. 3 options for word two - aye and ane.
@@ -127,7 +131,7 @@ public class BigramMain {
 	   * (see sea sss sea ses ese)
 	   */
 	  
-	  String[] leftAndMiddleWords = {"can", "can", "can", "can", "can", "can"};
+	  String[] leftAndMiddleWords = {"can", "can", "can", "bow", "bow", "bow"};
 	  String[] middleAndRightWords = {"see", "sea", "sss", "sea", "ses", "ese"};
 
 	  
@@ -177,13 +181,75 @@ public class BigramMain {
 	  System.out.println("Result: " + leftAndMiddleWords[min1Index] + " you " + middleAndRightWords[min2Index]);
   }
 
-  public void run(){
-  //public void edit() {
+  /**
+   * Perform operations and add scores -> Find score closest to 1 and return.
+   */
+  public static String getPriorWord(String base, ArrayList<String> options) {
+	  double[] scores = new double[options.size()];
+	  for(int i = 0; i < options.size(); i++) {
+		  scores[i] = lm.getProbability(options.get(i), base);
+	  }
+	  
+	  int minIndex = 0;
+	  double min = 100;
+	  
+	  for(int i = 0; i < scores.length; i++) {
+		  double score = scores[i];
+		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
+		  if(score > min && score > 0.0000000001) {
+			  min = score;
+			  minIndex = i;
+		  }
+	  }
+	  return options.get(minIndex);
+  }
+  
+  /**
+   * Perform operations and add scores -> Find score closest to 1 and return.
+   */
+  public static String getAfterWord(String base, ArrayList<String> options) {
+	  double[] scores = new double[options.size()];
+	  for(int i = 0; i < options.size(); i++) {
+		  scores[i] = lm.getProbability(base, options.get(i));
+	  }
+	  
+	  int minIndex = 0;
+	  double min = 100;
+	  
+	  for(int i = 0; i < scores.length; i++) {
+		  double score = scores[i];
+		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
+		  if(score > min && score > 0.0000000001) {
+			  min = score;
+			  minIndex = i;
+		  }
+	  }
+	  return options.get(minIndex);
+  }
+		
+  /**
+   * @param base center word.
+   * @param options - index 0 holds left side word options, index 1 hold right side word options.
+   * @return 
+   */
+  public static String getCenterWord(String base, ArrayList<ArrayList<String>> options) {
+	  String result = "";
+	  result += getPriorWord(base, options.get(0));
+	  result += " you ";
+	  result += getAfterWord(base, options.get(1));
+	  return result;
+  }
+  
+  public static void printWordsNotFound() {
+	  String wordsNotFound = lm.getWordsNotFound();
+	  System.out.println("Words not found in the training data: " + wordsNotFound);
+  }
+  
+  // Initialize and train model then check accuracy.
+  public BigramMain(){
     List<List<String>> trainLines = readWikitext("resources/wiki.train.tokens", -1);
     // List<List<String>> validLines = readWikitext("resources/wiki.valid.tokens", -1);
-    BigramLanguageModel lm = BigramLanguageModel.estimate(trainLines);
+    lm = BigramLanguageModel.estimate(trainLines);
     checkNormalization(lm);
-    
-    getWordProbabilites(lm);
   }
 }

@@ -14,6 +14,7 @@ public class BigramLanguageModel {
   public static final double LAMBDA = 0.9;
   public static final String BEGIN_SYMBOL = "<S>";
   public static final String END_SYMBOL = "</S>";
+  public static String wordsNotFound = "";
 
   public BigramLanguageModel(Map<String,Map<String,Integer>> bigramCounts, Map<String,Integer> contextCounts,
                              Map<String,Integer> unigramCounts) {
@@ -35,11 +36,10 @@ public class BigramLanguageModel {
 	  if(unigramCounts.containsKey(word)) {
 		  return ((double)unigramCounts.get(word))/totalUnigramCount;
 	  } else {
-		  System.out.println(word + "Was Not Found");
+		  wordsNotFound += word + " ";
 		  return 1.0;
+		  // May need a different return value.
 	  }
-	  // was return ((double)unigramCounts.get(word))/totalUnigramCount;
-
   }
 
   public double getProbability(String prevWord, String nextWord) {
@@ -71,5 +71,9 @@ public class BigramLanguageModel {
       }
     }
     return new BigramLanguageModel(bigramCounts, contextCounts, unigramCounts);
+  }
+  
+  public String getWordsNotFound() {
+	  return wordsNotFound;
   }
 }
