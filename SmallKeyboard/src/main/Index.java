@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import bigramLanguageModel.*;
 import sorting.Trie;
 import testing.*;
+
 // To-Do: Account for capitalization.
 public class Index {
 	private static Trie wordBank;
