@@ -7,7 +7,7 @@ public class WordToNum {
 	private HashMap<Character, Integer> table; 
 	private String wordVals = "";
 	
-	public void convert(String words) {
+	public String convert(String words) {
 		create();
 		
 		// Append number associated with letter. (a=1, w=2, e=3)
@@ -16,7 +16,8 @@ public class WordToNum {
 		// Print table of keys and values.
 		// for (Map.Entry<Character, Integer> entry : vals.entrySet()) System.out.println(entry.getKey() + " " + entry.getValue());
 		
-		System.out.println(wordVals); 
+		//System.out.println(wordVals); 
+		return wordVals;
 	}
 	
 	

@@ -12,7 +12,7 @@ public class trieDictionary {
 	
 	public void createDictionaryTrie() {
 	
-	    try (BufferedReader reader = new BufferedReader(new FileReader("dictionary"))) {
+	    try (BufferedReader reader = new BufferedReader(new FileReader("resources/dictionary2"))) {
 	        String line;
 	        while ((line = reader.readLine()) != null) {
 	        	cnt++;
