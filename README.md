@@ -35,7 +35,8 @@ By entering 73999, the ideal output would be "hello". Although it would produce 
 ## Features
 - Trie Data Structure for searching dictionary. (25,000 words)
 - Writing over CSV file.
-- Word to number and number to word algorithm
+- Word to number and number to word algorithm.
+  
 ## Installation
 
 ## Usage
