@@ -3,7 +3,7 @@ package main;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WordToNumConversion {
+public class WordToNum {
 	private HashMap<Character, Integer> table; 
 	private String wordVals = "";
 	

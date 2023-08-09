@@ -5,18 +5,27 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import sorting.Trie;
+
 /**
  * This class converts numeric sequences into corresponding words based on a character table
  * and stores them in a trie data structure for efficient searching and retrieval.
  * It also includes a predefined word bank for testing and demonstration purposes.
+ * 
+ * 	Word - Hello 
+ *	Number of Letter - 73999
+ *		Level 1: 6 options
+ * 		Level 2: 3 options for each of the 6 options from Level 1 = 6 * 3 = 18 options
+ *		Level 3: 3 options for each of the 18 options from Level 2 = 18 * 3 = 54 options
+ *		Level 4: 3 options for each of the 54 options from Level 3 = 54 * 3 = 162 options
+ *		Level 5: 3 options for each of the 162 options from Level 4 = 162 * 3 = 486 options
+ *	1 of the 486 will be hello with the correct letters. 
  */
-public class NumToWordConversion {
+
+public class NumToWord {
     private Map<Integer, List<Character>> table = new HashMap<>();
-	private String[] wordBank;
 	private Trie tree = new Trie();
-	public NumToWordConversion() {
-		this.wordBank = new String[] {"hello"};
-	}
 	
 	/**
 	 * Runs the program to generate and search words based on the given number.
@@ -25,16 +34,11 @@ public class NumToWordConversion {
 	 */
 	public void run(String number) {
 		fillTable();
-        // generateStrings(tree, "", number, 0);
         int wordsAdded = generateStrings(tree, "", number, 0);
-        System.out.println("Total words added: " + wordsAdded);
         
-        System.out.println(tree.search("nello"));
-        System.out.println(tree.search("helll"));
-	}
-	
-	public Trie getTree() {
-		return tree;
+        // System.out.println("Total words added: " + wordsAdded);
+        // System.out.println(tree.search("nello"));
+        // System.out.println(tree.search("helll"));
 	}
 
 	/**
@@ -80,5 +84,9 @@ public class NumToWordConversion {
 		table.put(8, new ArrayList<>(Arrays.asList('i', 'k')));
 		table.put(9, new ArrayList<>(Arrays.asList('o', 'l')));
 		table.put(10, new ArrayList<>(Arrays.asList('p')));
+	}
+	
+	public Trie getTree() {
+		return tree;
 	}
 }

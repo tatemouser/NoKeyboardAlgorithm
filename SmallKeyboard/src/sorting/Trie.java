@@ -1,4 +1,4 @@
-package main;
+package sorting;
 
 public class Trie {
     private TrieNode root;

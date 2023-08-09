@@ -1,11 +1,49 @@
 package main;
 
+import java.util.ArrayList;
+
+import sorting.Trie;
 import testing.*;
 
 public class Index {
+	private static Trie wordBank;
+	private static String[] wordCombinations;
+	private static ArrayList<String> wordMatches = new ArrayList<String>();
+	
 	public static void main(String[] args) {
-		// Testing
-	/*	WordToNumConversion words = new WordToNumConversion();
+		// printLetterToNumber();
+		WordToNum words = new WordToNum();
+		NumToWord number = new NumToWord();
+		
+		number.run("73999"); // = "Hello"
+		// NewWordsTrieList.writeToCSV(number.getTree(), number.getTree().getRoot(), "", "trieWordData.csv");
+		wordCombinations = NewWordsTrieList.writeToArray(number.getTree(), number.getTree().getRoot(),"");
+		// System.out.println(wordCombinations.length);
+		
+		trieDictionary dict = new trieDictionary();
+		dict.createDictionaryTrie();
+		wordBank = dict.getTree();
+		// System.out.println(dict.getCnt());
+		
+		
+		findMatches();
+		
+		for(String foundWord: wordMatches) {
+			System.out.println(foundWord);
+		}
+		
+	}
+	
+	
+	public static void findMatches() {
+		for(String word: wordCombinations) {
+			if(wordBank.search(word)) wordMatches.add(word);
+		}
+	}
+	
+	public static void printLetterToNumber() {
+		// Referencing the README keyboard image, each letter is converted and added to a string which is printed.
+		WordToNum words = new WordToNum();
 		words.convert("qaz"); 
 		words.convert("wsx"); 
 		words.convert("edc"); 
@@ -13,22 +51,6 @@ public class Index {
 		words.convert("yhnujm"); 
 		words.convert("ik"); 
 		words.convert("ol"); 
-		words.convert("p"); */
-		
-		WordToNumConversion words = new WordToNumConversion();
-		NumToWordConversion number = new NumToWordConversion();
-		
-		number.run("73999"); // hello is the correct case in the tree
-		
-		TrieToCSV.writeToCSV(number.getTree(), number.getTree().getRoot(), "", "trieWordData.csv");
-		
-	/*	hello
-		73999
-		Level 1: 6 options
-		Level 2: 3 options for each of the 6 options from Level 1 = 6 * 3 = 18 options
-		Level 3: 3 options for each of the 18 options from Level 2 = 18 * 3 = 54 options
-		Level 4: 3 options for each of the 54 options from Level 3 = 54 * 3 = 162 options
-		Level 5: 3 options for each of the 162 options from Level 4 = 162 * 3 = 486 options
-		1 of the 486 will be hello with the correct letters. */
+		words.convert("p");
 	}
 }
