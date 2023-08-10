@@ -12,17 +12,10 @@ public class Index {
 	private static String[] wordCombinations;
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 	
-	public static void printWordMatches() {
-		// Each row printed are the possible combinations available.
-		for(ArrayList<String> temp: wordMatches) {
-			String str = "";
-			for(int i = 0; i < temp.size(); i++) {
-				str += temp.get(i) + " ";
-			}
-			System.out.println(str);
-		}
-	}
-	
+	/** 
+	 * Splits word by 0's (representing spaces) -> Locate then send word to getWord() to find its combinations.
+	 * @param input - numbers inputted 
+	 */
 	public static void findAndAddMatches(String input) {
 		String currentWord = "";
 		// Iterate input and add results to final output.
@@ -38,14 +31,16 @@ public class Index {
 		}	
 	}
 	
-	// Creates trie of possible words -> Puts trie in array -> Creates dictionary -> Calls findMatches to compare dictionary with array 
+	/**
+	 * Create trie of possible words -> Adds all trie elements to array -> Initialize a dictionary trie -> Passes on array to findMatches(); 
+	 * @param input - Single word found in findAndAddMatches()
+	 */
 	public static void getWord(String input) {
 		NumToWord number = new NumToWord();
 		number.run(input); 
 
 		// NewWordsTrieList.writeToCSV(number.getTree(), number.getTree().getRoot(), "", "resources/trieWordData.csv");
 		wordCombinations = NewWordsTrieList.writeToArray(number.getTree(), number.getTree().getRoot(),"");
-		// System.out.println(wordCombinations.length);
 		
 		trieDictionary dict = new trieDictionary();
 		dict.createDictionaryTrie();
@@ -55,23 +50,23 @@ public class Index {
 		findMatches();
 	}
 	
-	// Compares array of combinations to dictionary. The wordMatches array is used to hold the results.
+	// Iterates array -> Stores matches in temp array -> Add array of valid combinations to wordMatches.
 	public static void findMatches() {
 		ArrayList<String> temp = new ArrayList<>();
-		for(String word: wordCombinations) {
-			if(wordBank.search(word))  {
-				temp.add(word);
-			}
-		}
+		for(String word: wordCombinations) 
+			if(wordBank.search(word)) temp.add(word);
+		
+		// Auto-Fill if no real words found.
 		if(wordCombinations.length > 0 && temp.size() == 0) {
 			wordCombinations[0] += "\t *WARNING: No word found in dictionary*";
 			temp.add(wordCombinations[0]);
 			wordMatches.add(temp);
 		}
+		
 		wordMatches.add(temp);
 	}
 	
-	// Provides nothing to program / Dev visualizer
+	// Provides nothing to program / Dev visual
 	public static void printLetterToNumber() {
 		// Referencing the README keyboard image, each letter is converted and added to a string which is printed.
 		WordToNum words = new WordToNum();
@@ -85,39 +80,42 @@ public class Index {
 		words.convert("p");
 	}
 	
+	// Each row printed represents combinations for word number.
+	public static void printWordMatches() {
+		int cnt = 1;
+		for(ArrayList<String> temp: wordMatches) {
+			String str = "Word " + cnt + " Options: ";
+			for(int i = 0; i < temp.size(); i++) {
+				str += temp.get(i) + " ";
+			}
+			System.out.println(str);
+			cnt++;
+		}
+		System.out.println("--------------------------------------------------");
+	}
+	
+	
+	
 	public static void main(String[] args) {
-		// printLetterToNumber(); // Show what number each letter cooresponds to.
+		// printLetterToNumber(); // Dev visual
 		
-		// Word to number for testing only. Program would normally bypass this step and take in numbers.
+		// Word to number for testing only. Program would normally bypass this step and take in numbers. ("Hello" starts program with 73999)
 		WordToNum words = new WordToNum();
-		String input = words.convert("i want to"); 
+		String input = words.convert("can you see");
 		
-		
-		// Convert input -> Get combinations -> Verify combinations with dictionary -> Save results 
+		// Convert input -> Get word combinations -> Verify combinations with dictionary -> Save matched results to "wordMatches" ArrayList.
 		findAndAddMatches(input);
-		// Print Results.
-		// printWordMatches();
+		printWordMatches();
 		
-		//BigramMain start = new BigramMain();
-		//BigramMain.exampleSet();
-		// Run matches through bigram model to get final string.
-		ArrayList<String> temp1 = new ArrayList<>();
-		ArrayList<String> temp2 = new ArrayList<>();
-		temp1.add("sss");
-		temp1.add("jsd");
-		temp1.add("how");
-		temp2.add("can");
-		temp2.add("at");
-		temp2.add("colll");
-		wordMatches.clear();
-		wordMatches.add(temp1);
-		wordMatches.add(temp2);
+		// Iterate wordMatches -> Test combinations with bigram -> Store best match scores -> Combine and save sentence.
 		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		String result = findMatches.getResult();
-		System.out.println(result);
-		//customBigramSet temp = new customBigramSet();
-		//temp.run();
 		
-		// System.out.println(result);
+		System.out.println("Best Result: " + result);
+		
+		
+		
+		//customBigramSet temp = new customBigramSet(); // Skip conversion, manual inputs for testing
+		//temp.run();
 	}
 }

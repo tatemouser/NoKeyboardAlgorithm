@@ -23,24 +23,24 @@ import sorting.Trie;
  *	1 of the 486 will be hello with the correct letters. 
  */
 
+
 public class NumToWord {
     private Map<Integer, List<Character>> table = new HashMap<>();
 	private Trie tree = new Trie();
-	
-	/**
-	 * Runs the program to generate and search words based on the given number.
-	 * 
-	 * @param number The number used to generate word variations. (hello = 73999)
-	 */
-	public void run(String number) {
-		fillTable();
-        int wordsAdded = generateStrings(tree, "", number, 0);
-        
-        // System.out.println("Total words added: " + wordsAdded);
-        // System.out.println(tree.search("nello"));
-        // System.out.println(tree.search("helll"));
-	}
 
+	private void fillTable() {
+		table.put(1, new ArrayList<>(Arrays.asList('q', 'a', 'z')));
+		table.put(2, new ArrayList<>(Arrays.asList('w', 's', 'x')));
+		table.put(3, new ArrayList<>(Arrays.asList('e', 'd', 'c')));
+		table.put(4, new ArrayList<>(Arrays.asList('r', 'f', 'v','t','g','b')));
+		table.put(7, new ArrayList<>(Arrays.asList('y', 'h', 'n','u','j','m')));
+		table.put(8, new ArrayList<>(Arrays.asList('i', 'k')));
+		table.put(9, new ArrayList<>(Arrays.asList('o', 'l')));
+		table.put(10, new ArrayList<>(Arrays.asList('p')));
+	}
+	
+	
+	
 	/**
 	 * Recursively generates all possible word variations and adds to table trie by 
 	 * associating characters from the digit-to-character table with the digits in 
@@ -64,29 +64,30 @@ public class NumToWord {
         List<Character> characters = table.get(digit);
 
         int wordsAdded = 0;
-        
         if (characters != null) {
-            for (char ch : characters) {
+            for (char ch : characters) 
             	// Recursively generate variations of words by appending a character, then incrementing digit and word count.
                 wordsAdded += generateStrings(trie, current + ch, number, index + 1);
-            }
         }
         
         return wordsAdded;
     }
 	
-	private void fillTable() {
-		table.put(1, new ArrayList<>(Arrays.asList('q', 'a', 'z')));
-		table.put(2, new ArrayList<>(Arrays.asList('w', 's', 'x')));
-		table.put(3, new ArrayList<>(Arrays.asList('e', 'd', 'c')));
-		table.put(4, new ArrayList<>(Arrays.asList('r', 'f', 'v','t','g','b')));
-		table.put(7, new ArrayList<>(Arrays.asList('y', 'h', 'n','u','j','m')));
-		table.put(8, new ArrayList<>(Arrays.asList('i', 'k')));
-		table.put(9, new ArrayList<>(Arrays.asList('o', 'l')));
-		table.put(10, new ArrayList<>(Arrays.asList('p')));
-	}
-	
 	public Trie getTree() {
 		return tree;
+	}
+	
+	/**
+	 * Runs the program to generate and search words based on the given number.
+	 * 
+	 * @param number The number used to generate word variations. (hello = 73999)
+	 */
+	public void run(String number) {
+		fillTable();
+        int wordsAdded = generateStrings(tree, "", number, 0);
+        
+        // System.out.println("Total words added: " + wordsAdded);
+        // System.out.println(tree.search("nello"));
+        // System.out.println(tree.search("helll"));
 	}
 }

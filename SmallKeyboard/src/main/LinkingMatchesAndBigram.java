@@ -7,47 +7,31 @@ import bigramLanguageModel.*;
 public class LinkingMatchesAndBigram {
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 	private static ArrayList<Double> baseWordScores = new ArrayList<>();
-	private static ArrayList<String> options = new ArrayList<>();
 
 	public LinkingMatchesAndBigram(ArrayList<ArrayList<String>> passed) {
-		this.wordMatches = passed;
+		LinkingMatchesAndBigram.wordMatches = passed;
 	}
 	
-	  public static boolean removeNine(double score) {
-		    double value = score;
-		    String valueStr = Double.toString(value);
-		    if (valueStr.length() >= 6) { // Check for length 6, since index is 0-based
-		        char digit5 = valueStr.charAt(5);
-	
-		        if (digit5 == '9') {
-		            //System.out.println("has nine");
-		            return false;
-		        }
-		    }
-		    //System.out.println("no nine");
-		    return true;
-		}
-	  
-	  private static boolean isScientificNotation(double value) {
-	      String stringValue = String.valueOf(value);
-	      return stringValue.toLowerCase().contains("e");
-	  }
-	
+	/**
+	 * Iterate first word combinations -> Find best 2nd word to match with EACH first word -> Compare all best matches.
+	 * @return Best word match by comparing 2nd to 1st word combination.
+	 */
 	public String firstWord() {
 		if(wordMatches.size() > 1) {
-			// If first word has multiple options, this picks a word then checks with the next options
+			// Gets one best match for each base word being the first word.
 			for(String baseWord: wordMatches.get(0)) {
 				// Finds best option for first word from second word set.
 				String option = BigramMain.getPriorWord(baseWord, wordMatches.get(1));
-				// Stores best pick score
+				// Stores best pick for each first word.
 				baseWordScores.add(BigramMain.getPriorWordScore(baseWord, option));
 			}
 		}
-		// Compare top scores to find smallest.
+		// Compare top scores. Finds score that is smallest value / No repeating 9's / Standard notation 
 		double min = 0;
 		int bestScoreIndex = 0;
 		for(int i = 0; i < baseWordScores.size(); i++) {	
-			if(removeNine(baseWordScores.get(i)) && baseWordScores.get(i) > min && !isScientificNotation(baseWordScores.get(i))) {
+			// Interpret bigram score results for most accurate return.
+			if(noRepeatingNine(baseWordScores.get(i)) && baseWordScores.get(i) > min && !isScientificNotation(baseWordScores.get(i))) {
 				bestScoreIndex = i;
 			}
 		}
@@ -55,22 +39,31 @@ public class LinkingMatchesAndBigram {
 		return wordMatches.get(0).get(bestScoreIndex);
 	}
 	
+
+	/**
+	 * Iterate word combinations -> Find best word from previous set to match with EACH word in solveForIndex set -> Compare all best matches.
+	 * 
+	 * @param solveForIndex - Index of original words - Will return one word from this set.
+	 * @return Best word match by comparing previous set to original word set.
+	 */
 	public String nextWord(int solveForIndex) {
+		// Holds index of main set scores found from previous set best scores.
 		ArrayList<Integer> optionBestIndex = new ArrayList<>();
-		// If last word has multiple options, this picks a word then checks with the next options
+		// Gets one best match for each base word being the solveForIndex word.
 		for(String baseWord: wordMatches.get(solveForIndex-1)) {
-			// Finds best option for last word from next set.
+			// Finds best option for first word from previous word set.
 			String option = BigramMain.getAfterWord(baseWord, wordMatches.get(solveForIndex));
 			optionBestIndex.add(wordMatches.get(solveForIndex).indexOf(option));
-			// Stores best pick score
+			// Stores best pick.
 			baseWordScores.add(BigramMain.getAfterWordScore(baseWord, option));
 		}
 		
-		// Compare top scores to find smallest.
+		// Compare top scores. Finds score that is smallest value / No repeating 9's / Standard notation 
 		double min = Double.MAX_VALUE;
 		int bestScoreIndex = 0;
 		for(int i = 0; i < baseWordScores.size(); i++) {
-			if(removeNine(baseWordScores.get(i)) && baseWordScores.get(i) < min && !isScientificNotation(baseWordScores.get(i))) {
+			// Interpret bigram score results for most accurate return.
+			if(noRepeatingNine(baseWordScores.get(i)) && baseWordScores.get(i) < min && !isScientificNotation(baseWordScores.get(i))) {
 				min = baseWordScores.get(i);
 				bestScoreIndex = i;
 			}
@@ -80,52 +73,51 @@ public class LinkingMatchesAndBigram {
 		return wordMatches.get(solveForIndex).get(optionBestIndex.get(bestScoreIndex));
 	}
 	
-	public String middleWord() {
-		return null;
+	
+	
+	// Condition for interpretting birgram word combination scores. Often decimals with repeating 9's are invalid scores.
+	public static boolean noRepeatingNine(double score) { 
+	    double value = score;
+	    String valueStr = Double.toString(value);
+	    if (valueStr.length() >= 8) { 
+	        char digit5 = valueStr.charAt(5);
+	        char digit6 = valueStr.charAt(6);
+	        char digit7 = valueStr.charAt(7);
+	        
+	        if (digit5 == '9' && digit6 == '9' && digit7 == '9') return false;
+	    }
+	    return true;
 	}
+
+	// Condition for interpretting birgram word combination scores. Ignores numbers with very long decimals.
+	private static boolean isScientificNotation(double score) {
+		String stringValue = String.valueOf(score);
+	    return stringValue.toLowerCase().contains("e");
+	 }
 	
 	
 	
+	
+	// **Visual and example for finding best sequence of words in customBigramSet class.**
 	public String getResult() {
 		// Initialize and train model with data set.
 		BigramMain bigramMain = new BigramMain();
-		//BigramMain.getAfterWord();
-		//BigramMain.getPriorWord();
-		//BigramMain.getCenterWord();
-		
-		/** EXAMPLE SET: 3 and 3 for two words.
-		 *  thast tool 	
-		 *  hatas bool	
-		 *  thats cool  
-		 *  
-		 *  thast-tool				 	hatas-tool-bestScore-12  	thats-tool
-		 *  thast-bool- 			 	hatas-bool				 	thats-bool
-		 *  thast-cool- bestScore-10 	hatas-cool				 	thats-cool-bestScore-20
-		 *  
-		 *  Selects "thats cool" since its the best of the 3 scores.
-		 */
-		
-		// Should add 9 scores to finalMatchingScores and 9 word combos to finalWordCombos
-		// Takes highest score, uses index to get best word combo. Adds single word result.
-		ArrayList<Double> finalMatchingScores = new ArrayList<>();
-		ArrayList<String> finalWordCombos = new ArrayList<>();
-		
+				
 		String finalResult = "";
-		String result = ""; //delete this.
 		
+		// Each index of wordMatches holds a words combinations. Only 1 iteration is needed to get final sentence.
 		for(int i = 0; i < wordMatches.size(); i++) {
-			// Search Right Only (first set)
+			// Find first word using 2nd set of combinations
 			 if(i == 0) {
 				finalResult += firstWord() + " ";
-			 // Search Left Only (last set)
+			 // Find other words by comparing current set to the prior set.
 			 } else {
 				int solveForIndex = i;
-				finalResult += nextWord(solveForIndex);
+				finalResult += nextWord(solveForIndex) + " ";
 			}
-			
 		}
 		
-		// BigramMain.printWordsNotFound();
+		// BigramMain.printWordsNotFound(); // Words ignored by checking with dictionary.
 		return finalResult;
 	}
 }

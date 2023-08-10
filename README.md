@@ -17,7 +17,7 @@ The concept of this project is to create an algorithm for a keyboard with only 1
 
 By entering 73999, the ideal output would be "hello". Although it would produce several variations of this. Here is an example of the letter combination size.
 
-* Level 1: 6 options (Y, U, H, J, N, H)
+* Level 1: 6 options (Y, U, H, J, N, M)
 
 * Level 2: 3 options for each of the 6 options from Level 1 = 6 * 3 = 18 options (E, D, C)
    

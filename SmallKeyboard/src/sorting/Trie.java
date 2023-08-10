@@ -3,6 +3,16 @@ package sorting;
 public class Trie {
     private TrieNode root;
 
+    /**Ex: Holding words: two/that/this
+     * 			T	
+     * 		    /\
+     * 		   H  W 
+     * 		   /\  \
+     *        I  A  O
+     *       / 	 /	   
+     * 		S	T
+     */
+    
     public Trie() {
         root = new TrieNode();
     }

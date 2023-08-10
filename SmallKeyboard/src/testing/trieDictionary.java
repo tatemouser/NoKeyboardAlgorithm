@@ -10,6 +10,7 @@ public class trieDictionary {
 	private Trie tree = new Trie();
 	private int cnt = 0;
 	
+	// Reads all lines of dictionary file and adds to trie, visual within in Trie class.
 	public void createDictionaryTrie() {
 	
 	    try (BufferedReader reader = new BufferedReader(new FileReader("resources/dictionary2"))) {
@@ -20,7 +21,7 @@ public class trieDictionary {
 	            tree.insert(word);
 	        }
 	    } catch (IOException e) {
-	    	System.out.println("Could not find dictionary.");
+	    	System.out.println("Could not find dictionary file.");
 	        e.printStackTrace();
 	    }
 	}

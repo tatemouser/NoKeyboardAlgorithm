@@ -7,6 +7,7 @@ public class WordToNum {
 	private HashMap<Character, Integer> table; 
 	private String wordVals = "";
 	
+	// Used for quick testing of conversion. This class would not be needed in the field since only digits would be entered as inputs.
 	public String convert(String words) {
 		create();
 		
@@ -16,7 +17,7 @@ public class WordToNum {
 		// Print table of keys and values.
 		// for (Map.Entry<Character, Integer> entry : vals.entrySet()) System.out.println(entry.getKey() + " " + entry.getValue());
 		
-		//System.out.println(wordVals); 
+		System.out.println("Input: " + wordVals);
 		return wordVals;
 	}
 	

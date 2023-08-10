@@ -7,57 +7,60 @@ import java.util.*;
 // Source: https://www.youtube.com/watch?v=7bf5EdQONTM
 
 public class BigramMain {
-  public static BigramLanguageModel lm;
-  static Random r = new Random();
-  
-  private static boolean isScientificNotation(double value) {
-      String stringValue = String.valueOf(value);
-      return stringValue.toLowerCase().contains("e");
-  }
-  
-  public static List<List<String>> readWikitext(String path, int maxLines) {
-    System.out.println("Reading and training has started:  Using " + path);
-    List<List<String>> lines = new ArrayList<List<String>>();
-    BufferedReader reader;
-    try {
-      reader = new BufferedReader(new FileReader(path));
-      String line = reader.readLine();
-      int numLines = 0;
-      while (line != null && (maxLines < 0 || numLines < maxLines)) {
-        if (line.trim().length() > 0) {
-          List<String> thisLine = new ArrayList<>();
-          thisLine.add(BigramLanguageModel.BEGIN_SYMBOL);
-          String[] split = line.split(" ");
-          for (String word : split) {
-            if (word.trim().length() > 0) {
-              thisLine.add(word);
-            }
-          }
-          thisLine.add(BigramLanguageModel.END_SYMBOL);
-          lines.add(thisLine);
-          numLines += 1;
-        }
-        line = reader.readLine();
-      }
-      reader.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    System.out.println("Training Complete: Read " + lines.size() + " lines");
-    return lines;
-  }
+	public static BigramLanguageModel lm; // Static instance of the BigramLanguageModel class for language modeling
+	static Random r = new Random(); // Static instance of the Random class for generating random numbers
 
-  /**
-   * Checks the normalization of lm in a few different contexts
-   * @param lm
-   */
-  public static void checkNormalization(BigramLanguageModel lm) {
-	System.out.println("Testing Started-----------------------------------");
-    checkNormalization(lm, "the");
-    checkNormalization(lm, "asked");
-    checkNormalization(lm, "did");
-    System.out.println("Testing Complete-----------------------------------");
-  }
+	// Reads and processes wikitext data from a file
+	public static List<List<String>> readWikitext(String path, int maxLines) {
+	    System.out.println("Reading and training has started: Using " + path);
+	    List<List<String>> lines = new ArrayList<List<String>>(); // List to store lines of tokenized words
+	    
+	    BufferedReader reader;
+	    try {
+	        reader = new BufferedReader(new FileReader(path)); // Open a reader for the specified file
+	        String line = reader.readLine(); // Read the first line from the file
+	        int numLines = 0; // Count of processed lines
+	        
+	        // Read lines from the file until reaching the maximum limit (maxLines) or end of file
+	        while (line != null && (maxLines < 0 || numLines < maxLines)) {
+	            if (line.trim().length() > 0) { // Check if the line is not empty
+	                List<String> thisLine = new ArrayList<>(); // List to store tokens in the current line
+	                thisLine.add(BigramLanguageModel.BEGIN_SYMBOL); // Add a special BEGIN_SYMBOL at the beginning
+
+	                // Split the line into words based on spaces and process each word
+	                String[] split = line.split(" ");
+	                for (String word : split) {
+	                    if (word.trim().length() > 0) { // Check if the word is not empty
+	                        thisLine.add(word); // Add the word to the current line's tokens
+	                    }
+	                }
+
+	                thisLine.add(BigramLanguageModel.END_SYMBOL); // Add a special END_SYMBOL at the end
+	                lines.add(thisLine); // Add the processed line to the list
+	                numLines += 1; // Increment the line count
+	            }
+	            line = reader.readLine(); // Read the next line from the file
+	        }
+	        reader.close(); // Close the reader after reading all lines
+	    } catch (IOException e) {
+	        e.printStackTrace(); // Print the stack trace in case of an IOException
+	    }
+	    
+	    System.out.println("Training Complete: Read " + lines.size() + " lines");
+	    return lines; // Return the list of tokenized lines from the wikitext
+	}
+   
+	//Checks the normalization of lm in a few different contexts. 
+	public static void checkNormalization(BigramLanguageModel lm) {
+		System.out.println("--------------------------------------------------");
+		System.out.println("Testing Started");
+
+		checkNormalization(lm, "the");
+		checkNormalization(lm, "asked");
+		checkNormalization(lm, "did");
+		System.out.println("Testing Complete");
+		System.out.println("--------------------------------------------------");
+	}
 
   /**
    * Checks the normalization of the LM in the given prevWord context. Prints a warning message if the sum
@@ -65,225 +68,126 @@ public class BigramMain {
    * @param lm
    * @param prevWord
    */
-  public static void checkNormalization(BigramLanguageModel lm, String prevWord) {
-    double totalProb = 0.0;
-    for (String word : lm.getVocabulary()) {
-      totalProb += lm.getProbability(prevWord, word);
-    }
-    if (Math.abs(totalProb - 1.0) > 1e-3) {
-      System.out.println("ERROR: normalization test failed: probabilities sum to " + totalProb + " rather than 1");
-    } else {
-      System.out.println("Valid! Sums to " + totalProb + " after context \"" + prevWord + "\"");
-    }
-  }
+	public static void checkNormalization(BigramLanguageModel lm, String prevWord) {
+		double totalProb = 0.0;
+	    // Iterate through the vocabulary of the language model.
+		for (String word : lm.getVocabulary()) {
+			// Calculate the probability for the current word given the context.
+			totalProb += lm.getProbability(prevWord, word);
+		}    
+		// Compare the sum of probabilities to 1.0 with a tolerance threshold
+		if (Math.abs(totalProb - 1.0) > 1e-3) {
+			System.out.println("ERROR: normalization test failed: probabilities sum to " + totalProb + " rather than 1");
+		} else {
+			System.out.println("Valid! Sums to " + totalProb + " after context \"" + prevWord + "\"");
+		}
+	}
   
-
-  /**
-   * Prints the top 5 most likely next words after prevWord according to the lm
-   * @param lm
-   * @param prevWord
-   */
-  public static void evaluateLm(BigramLanguageModel lm, List<List<String>> data) {
-    double totalLogProb = 0.0;
-    int wordCounts = 0;
-    Collection<String> vocab = lm.getVocabulary();
-    int ignoredWords = 0;
-    for (List<String> sent : data) {
-      // Score everything from 1 until the end, ignoring BOS
-      for (int i = 1; i < sent.size(); i++) {
-        if (vocab.contains(sent.get(i))) {
-          totalLogProb += -Math.log(lm.getProbability(sent.get(i - 1), sent.get(i)));
-          wordCounts += 1;
-        } else {
-          ignoredWords += 1;
-        }
-      }
-    }
-    System.out.println("Perplexity: " + Math.exp(totalLogProb/wordCounts) + " with " + ignoredWords + " words ignored");
-  }
   
-  /**
-   * Value printed closest to 1 is the word most likely to follow. Non-existing words will be labeled as "not-found".
-   * @param lm
-   */
-  public static void exampleSet() {
-	  /* 
-		Original String - "innovative and" - Generated "innovative" "aye" "and" "ane".
-		One selection for first word - innovative. 3 options for word two - aye and ane.
-		Generates probability of each of the 3 options following the original word.
-	  
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("innovative", "aye"));
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("innovative", "and"));
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("innovative", "ane"));
-	  System.out.println();
-	  
-	  // For checking word after.
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("can", "you"));
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("can", "hon"));
-	  
-	  System.out.println();
-	  // For checking word prior.
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("you", "can"));
-	  System.out.println("This is the test results that I am looking for" + lm.getProbability("ppp", "can"));
-	  
-	  */
-	  
-	  /**
-	   * Initial input options. Choosing and returning best option prior and after the word you.
-	   * 
-	   * (can bow) 
-	   * (you) 
-	   * (see sea sss sea ses ese)
-	   */
-	  
-	  String[] leftAndMiddleWords = {"can", "can", "can", "bow", "bow", "bow"};
-	  String[] middleAndRightWords = {"see", "sea", "sss", "sea", "ses", "ese"};
+	
+	
 
+   /**
+	* Get probabilities of base word to all options -> Choose best score.
+	* @param base - Original set.
+	* @param options - Set following original.
+	* @return Score with no repeating 9's / Standard notation / smallest value.
+	*/
+	public static String getAfterWord(String base, ArrayList<String> options) {
+		double[] scores = new double[options.size()];
+		for(int i = 0; i < options.size(); i++) {
+			scores[i] = lm.getProbability(base, options.get(i));
+		}
 	  
-	  double[] leftAndMiddleWord = new double[6];
-	  double[] middleAndRightWord = new double[6];
-
-	  leftAndMiddleWord[0] = lm.getProbability("can", "you");
-	  middleAndRightWord[0] = lm.getProbability("you", "see");
+		double min = Double.MAX_VALUE;	  
+		int minIndex = 0;
 	  
-	  leftAndMiddleWord[1] = lm.getProbability("can", "you");
-	  middleAndRightWord[1] = lm.getProbability("you", "sea");
-	  
-	  leftAndMiddleWord[2] = lm.getProbability("can", "you");
-	  middleAndRightWord[2] = lm.getProbability("you", "sss");
-	  
-	  leftAndMiddleWord[3] = lm.getProbability("can", "bow");
-	  middleAndRightWord[3] = lm.getProbability("bow", "sea");
-	  
-	  leftAndMiddleWord[4] = lm.getProbability("can", "bow");
-	  middleAndRightWord[4] = lm.getProbability("bow", "ses");
-	  
-	  leftAndMiddleWord[5] = lm.getProbability("can", "bow");
-	  middleAndRightWord[5] = lm.getProbability("bow", "ese");
-	  
-	  // Find best values 
-	  double min1 = 100; // make absolute min
-	  double min2 = 100;
-
-	  int min1Index = 0;
-	  int min2Index = 0;
-	  for(int i = 0; i < leftAndMiddleWord.length; i++) {
-		  // System.out.println(leftAndMiddleWord[i] + " " + min1);
-		  if(leftAndMiddleWord[i] < min1 && leftAndMiddleWord[i] > .00001) {
-			  min1Index = i;
-			  min1 = leftAndMiddleWord[i];
-		  }
-		  
-	  }
-	  for(int i = 0; i < middleAndRightWord.length; i++) {
-		  // System.out.println(middleAndRightWord[i] + " " + min2);
-		  if(middleAndRightWord[i] < min2 && middleAndRightWord[i] > 0.00001) {
-			  min2Index = i;
-			  min2 = middleAndRightWord[i];
-		  }
-	  }
-
-	  System.out.println("Result: " + leftAndMiddleWords[min1Index] + " you " + middleAndRightWords[min2Index]);
-  }
-
-  /**
-   * Adds operation scores -> Find lowest score that has no scientific notation and return.
-   */
-  public static String getAfterWord(String base, ArrayList<String> options) {
-	  double[] scores = new double[options.size()];
-	  for(int i = 0; i < options.size(); i++) {
-		  scores[i] = lm.getProbability(base, options.get(i));
-		  //System.out.println(base + " " + options.get(i) + " " + scores[i]);
-	  }
-	  
-	  double min = Double.MAX_VALUE;	  
-	  int minIndex = 0;
-	  
-	  for(int i = 0; i < scores.length; i++) {
-		  double score = scores[i];
-		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
-          //if (score < min && score < 0.01 && !isScientificNotation(score)) {
-          if (removeNine(score) && score < min && !isScientificNotation(score)) {
-              min = score;
-              minIndex = i;
-          }
-		  
-	  }
-	  return options.get(minIndex);
-  }
+		// Find best score.
+		for(int i = 0; i < scores.length; i++) {
+			double score = scores[i];
+			if (removeNine(score) && score < min && !isScientificNotation(score)) {
+				min = score;
+				minIndex = i;
+			}
+		}
+		return options.get(minIndex);
+	}
   
-  /**
-   * Adds operation scores -> Find lowest score that has no scientific notation and return.
-   */
-  public static String getPriorWord(String base, ArrayList<String> options) {
-	  double[] scores = new double[options.size()];
-	  for(int i = 0; i < options.size(); i++) {
-		  scores[i] = lm.getProbability(base, options.get(i));
-	  }
+   /**
+	* Get probabilities of base word to all options -> Choose best score.
+	* @param base - Original set.
+	* @param options - Set prior to original.
+	* @return Score with no repeating 9's / Standard notation / smallest value.
+	*/
+	public static String getPriorWord(String base, ArrayList<String> options) {
+		double[] scores = new double[options.size()];
+		for(int i = 0; i < options.size(); i++) {
+			scores[i] = lm.getProbability(base, options.get(i));
+		}
 	  
-	  double min = Double.MAX_VALUE;
-	  int minIndex = 0;
+		double min = Double.MAX_VALUE;
+		int minIndex = 0;
 	  
-	  for(int i = 0; i < scores.length; i++) {
-		  double score = scores[i];
-		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
-          //if (removeNine(score) && score < min && score < 0.1 && !isScientificNotation(score)) {
-          if (removeNine(score) && score < min && !isScientificNotation(score)) {
-              min = score;
-              minIndex = i;
-          } else {
-          }
-	  }
-	  return options.get(minIndex);
-  }
+		// Find best score.
+		for(int i = 0; i < scores.length; i++) {
+			double score = scores[i];
+			if (removeNine(score) && score < min && !isScientificNotation(score)) {
+				min = score;
+				minIndex = i;
+			}
+		}
+		return options.get(minIndex);
+	}
   
-  public static boolean removeNine(double score) {
-	    double value = score;
+	
+	// Condition for interpretting birgram word combination scores. Often decimals with repeating 9's are invalid scores.
+	public static boolean removeNine(double score) {
+		double value = score;
 	    String valueStr = Double.toString(value);
-	    if (valueStr.length() >= 6) { // Check for length 6, since index is 0-based
+	    if (valueStr.length() >= 6) { 
 	        char digit5 = valueStr.charAt(5);
+	        char digit6 = valueStr.charAt(6);
+	        char digit7 = valueStr.charAt(7);
 
-	        if (digit5 == '9') {
-	            //System.out.println("has nine");
+	        if (digit5 == '9' && digit6 == '9' && digit7 == '9') {
 	            return false;
 	        }
 	    }
-	    //System.out.println("no nine");
 	    return true;
+	}
+	
+	// Condition for interpretting birgram word combination scores. Ignores numbers with very long decimals.
+	private static boolean isScientificNotation(double value) {
+		String stringValue = String.valueOf(value);
+		return stringValue.toLowerCase().contains("e");
 	}
 
   
-  // Following two classes used in in LinkingMatchesAndBigram for comparing best results.
-  public static double getPriorWordScore(String option, String base) {
+	
+	
+	
+	// Following two classes used in in LinkingMatchesAndBigram for comparing best results.
+	public static double getPriorWordScore(String option, String base) { 
 	  return lm.getProbability(option, base);
-  }
-  public static double getAfterWordScore(String base, String option) {
-	  return lm.getProbability(base, option);
-  }
-		
-  /**
-   * @param base center word.
-   * @param options - index 0 holds left side word options, index 1 hold right side word options.
-   * @return 
-   */
-  public static String getCenterWord(String base, ArrayList<ArrayList<String>> options) {
-	  String result = "";
-	  result += getPriorWord(base, options.get(0));
-	  result += " " + base + " ";
-	  result += getAfterWord(base, options.get(1));
-	  return result;
-  }
-  
-  public static void printWordsNotFound() {
-	  String wordsNotFound = lm.getWordsNotFound();
-	  System.out.println("Words not found in the training data: " + wordsNotFound);
-  }
+	}
+	public static double getAfterWordScore(String base, String option) {
+		return lm.getProbability(base, option);
+	}
+	
+	// Used in LinkingMatchesAndBigram class for testing.
+	public static void printWordsNotFound() {
+		String wordsNotFound = lm.getWordsNotFound();
+		System.out.println("Words not found in the training data: " + wordsNotFound);
+	}
+
+	
+	
   
   // Initialize and train model then check accuracy.
   public BigramMain(){
-    List<List<String>> trainLines = readWikitext("resources/wiki.train.tokens", -1);
-    // List<List<String>> validLines = readWikitext("resources/wiki.valid.tokens", -1);
-    lm = BigramLanguageModel.estimate(trainLines);
-    checkNormalization(lm);
+	  List<List<String>> trainLines = readWikitext("resources/wiki.train.tokens", -1);
+	  // List<List<String>> validLines = readWikitext("resources/wiki.valid.tokens", -1);
+	  lm = BigramLanguageModel.estimate(trainLines);
+	  checkNormalization(lm);
   }
 }
