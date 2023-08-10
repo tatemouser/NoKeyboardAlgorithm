@@ -12,7 +12,22 @@ public class LinkingMatchesAndBigram {
 	public LinkingMatchesAndBigram(ArrayList<ArrayList<String>> passed) {
 		this.wordMatches = passed;
 	}
-
+	
+	  public static boolean removeNine(double score) {
+		    double value = score;
+		    String valueStr = Double.toString(value);
+		    if (valueStr.length() >= 6) { // Check for length 6, since index is 0-based
+		        char digit5 = valueStr.charAt(5);
+	
+		        if (digit5 == '9') {
+		            //System.out.println("has nine");
+		            return false;
+		        }
+		    }
+		    //System.out.println("no nine");
+		    return true;
+		}
+	  
 	  private static boolean isScientificNotation(double value) {
 	      String stringValue = String.valueOf(value);
 	      return stringValue.toLowerCase().contains("e");
@@ -23,17 +38,16 @@ public class LinkingMatchesAndBigram {
 			// If first word has multiple options, this picks a word then checks with the next options
 			for(String baseWord: wordMatches.get(0)) {
 				// Finds best option for first word from second word set.
-				String option = BigramMain.getAfterWord(baseWord, wordMatches.get(1));
+				String option = BigramMain.getPriorWord(baseWord, wordMatches.get(1));
 				// Stores best pick score
-				baseWordScores.add(BigramMain.getAfterWordScore(baseWord, option));
+				baseWordScores.add(BigramMain.getPriorWordScore(baseWord, option));
 			}
 		}
-
 		// Compare top scores to find smallest.
-		double min = Double.MAX_VALUE;
+		double min = 0;
 		int bestScoreIndex = 0;
 		for(int i = 0; i < baseWordScores.size(); i++) {	
-			if(baseWordScores.get(i) < min && baseWordScores.get(i) < 0.01 && !isScientificNotation(baseWordScores.get(i))) {
+			if(removeNine(baseWordScores.get(i)) && baseWordScores.get(i) > min && !isScientificNotation(baseWordScores.get(i))) {
 				bestScoreIndex = i;
 			}
 		}
@@ -41,27 +55,29 @@ public class LinkingMatchesAndBigram {
 		return wordMatches.get(0).get(bestScoreIndex);
 	}
 	
-	public String lastWord() {
-		int size = wordMatches.size();
+	public String nextWord(int solveForIndex) {
+		ArrayList<Integer> optionBestIndex = new ArrayList<>();
 		// If last word has multiple options, this picks a word then checks with the next options
-		for(String baseWord: wordMatches.get(size-2)) {
-			// Finds best option for last word from second to last word set.
-			String option = BigramMain.getPriorWord(baseWord, wordMatches.get(size-1));
+		for(String baseWord: wordMatches.get(solveForIndex-1)) {
+			// Finds best option for last word from next set.
+			String option = BigramMain.getAfterWord(baseWord, wordMatches.get(solveForIndex));
+			optionBestIndex.add(wordMatches.get(solveForIndex).indexOf(option));
 			// Stores best pick score
-			baseWordScores.add(BigramMain.getPriorWordScore(option, baseWord));
+			baseWordScores.add(BigramMain.getAfterWordScore(baseWord, option));
 		}
 		
-
 		// Compare top scores to find smallest.
 		double min = Double.MAX_VALUE;
 		int bestScoreIndex = 0;
-		for(int i = 0; i < baseWordScores.size(); i++) {	
-			if(baseWordScores.get(i) < min && baseWordScores.get(i) < 0.01 && !isScientificNotation(baseWordScores.get(i))) {
+		for(int i = 0; i < baseWordScores.size(); i++) {
+			if(removeNine(baseWordScores.get(i)) && baseWordScores.get(i) < min && !isScientificNotation(baseWordScores.get(i))) {
+				min = baseWordScores.get(i);
 				bestScoreIndex = i;
 			}
 		}
+		
 		baseWordScores.clear();
-		return wordMatches.get(size-1).get(bestScoreIndex);
+		return wordMatches.get(solveForIndex).get(optionBestIndex.get(bestScoreIndex));
 	}
 	
 	public String middleWord() {
@@ -101,10 +117,10 @@ public class LinkingMatchesAndBigram {
 			// Search Right Only (first set)
 			 if(i == 0) {
 				finalResult += firstWord() + " ";
-				
 			 // Search Left Only (last set)
-			 } else if(i == wordMatches.size()-1) {
-				finalResult += lastWord();
+			 } else {
+				int solveForIndex = i;
+				finalResult += nextWord(solveForIndex);
 			}
 			
 		}

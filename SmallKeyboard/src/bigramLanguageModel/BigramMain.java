@@ -189,7 +189,7 @@ public class BigramMain {
   /**
    * Adds operation scores -> Find lowest score that has no scientific notation and return.
    */
-  public static String getPriorWord(String base, ArrayList<String> options) {
+  public static String getAfterWord(String base, ArrayList<String> options) {
 	  double[] scores = new double[options.size()];
 	  for(int i = 0; i < options.size(); i++) {
 		  scores[i] = lm.getProbability(base, options.get(i));
@@ -202,7 +202,8 @@ public class BigramMain {
 	  for(int i = 0; i < scores.length; i++) {
 		  double score = scores[i];
 		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
-          if (score < min && score < 0.01 && !isScientificNotation(score)) {
+          //if (score < min && score < 0.01 && !isScientificNotation(score)) {
+          if (removeNine(score) && score < min && !isScientificNotation(score)) {
               min = score;
               minIndex = i;
           }
@@ -214,11 +215,10 @@ public class BigramMain {
   /**
    * Adds operation scores -> Find lowest score that has no scientific notation and return.
    */
-  public static String getAfterWord(String base, ArrayList<String> options) {
+  public static String getPriorWord(String base, ArrayList<String> options) {
 	  double[] scores = new double[options.size()];
 	  for(int i = 0; i < options.size(); i++) {
 		  scores[i] = lm.getProbability(base, options.get(i));
-		  System.out.println(base + " " + options.get(i) + " " + scores[i]);
 	  }
 	  
 	  double min = Double.MAX_VALUE;
@@ -227,13 +227,31 @@ public class BigramMain {
 	  for(int i = 0; i < scores.length; i++) {
 		  double score = scores[i];
 		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
-          if (score < min && score < 0.01 && !isScientificNotation(score)) {
+          //if (removeNine(score) && score < min && score < 0.1 && !isScientificNotation(score)) {
+          if (removeNine(score) && score < min && !isScientificNotation(score)) {
               min = score;
               minIndex = i;
+          } else {
           }
 	  }
 	  return options.get(minIndex);
   }
+  
+  public static boolean removeNine(double score) {
+	    double value = score;
+	    String valueStr = Double.toString(value);
+	    if (valueStr.length() >= 6) { // Check for length 6, since index is 0-based
+	        char digit5 = valueStr.charAt(5);
+
+	        if (digit5 == '9') {
+	            //System.out.println("has nine");
+	            return false;
+	        }
+	    }
+	    //System.out.println("no nine");
+	    return true;
+	}
+
   
   // Following two classes used in in LinkingMatchesAndBigram for comparing best results.
   public static double getPriorWordScore(String option, String base) {

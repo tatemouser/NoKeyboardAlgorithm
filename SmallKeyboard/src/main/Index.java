@@ -96,18 +96,18 @@ public class Index {
 		// Convert input -> Get combinations -> Verify combinations with dictionary -> Save results 
 		findAndAddMatches(input);
 		// Print Results.
-		printWordMatches();
+		// printWordMatches();
 		
 		//BigramMain start = new BigramMain();
 		//BigramMain.exampleSet();
 		// Run matches through bigram model to get final string.
 		ArrayList<String> temp1 = new ArrayList<>();
 		ArrayList<String> temp2 = new ArrayList<>();
-		temp1.add("tt");
-		temp1.add("it");
-		temp1.add("tt");
-		temp2.add("could");
-		temp2.add("coooo");
+		temp1.add("sss");
+		temp1.add("jsd");
+		temp1.add("how");
+		temp2.add("can");
+		temp2.add("at");
 		temp2.add("colll");
 		wordMatches.clear();
 		wordMatches.add(temp1);
