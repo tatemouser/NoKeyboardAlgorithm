@@ -86,54 +86,38 @@ public class Index {
 	}
 	
 	public static void main(String[] args) {
-		// printLetterToNumber();
-		// Converting from a word to number for the sake of testing. Typically the program would bypass this step and take in numbers.
+		// printLetterToNumber(); // Show what number each letter cooresponds to.
+		
+		// Word to number for testing only. Program would normally bypass this step and take in numbers.
 		WordToNum words = new WordToNum();
-
 		String input = words.convert("i want to"); 
 		
+		
+		// Convert input -> Get combinations -> Verify combinations with dictionary -> Save results 
 		findAndAddMatches(input);
+		// Print Results.
 		printWordMatches();
 		
+		//BigramMain start = new BigramMain();
+		//BigramMain.exampleSet();
+		// Run matches through bigram model to get final string.
+		ArrayList<String> temp1 = new ArrayList<>();
+		ArrayList<String> temp2 = new ArrayList<>();
+		temp1.add("tt");
+		temp1.add("it");
+		temp1.add("tt");
+		temp2.add("could");
+		temp2.add("coooo");
+		temp2.add("colll");
+		wordMatches.clear();
+		wordMatches.add(temp1);
+		wordMatches.add(temp2);
+		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
+		String result = findMatches.getResult();
+		System.out.println(result);
+		//customBigramSet temp = new customBigramSet();
+		//temp.run();
 		
-		/*
-		// Initialize and train model with data set.
-		BigramMain bigramMain = new BigramMain();
-		//BigramMain.getAfterWord();
-		//BigramMain.getPriorWord();
-		//BigramMain.getCenterWord();
-		
-		ArrayList<Double> totalSetMatchScoring = new ArrayList<>();
-		String result = "";
-		for(int i = 0; i < wordMatches.size(); i++) {
-			// Search Right Only (first set)
-			if(i == 0) {
-				ArrayList<String> baseWord = wordMatches.get(0); // Assuming 1 option. 
-				ArrayList<String> options = wordMatches.get(1);
-				result += BigramMain.getAfterWord(baseWord.get(0), options) + " ";
-				
-			// Search Left Only (last set)
-			} else if(i == wordMatches.size()-1) {
-				ArrayList<String> baseWord = wordMatches.get(2); // Assuming 1 option. 
-				ArrayList<String> options = wordMatches.get(1);
-				result += BigramMain.getPriorWord(baseWord.get(0), options) + " ";
-				
-			// Cross Search 
-			} else {
-				ArrayList<String> baseWord = wordMatches.get(1); // Assuming 1 option.
-				
-				ArrayList<String> leftOptions = wordMatches.get(0);
-				ArrayList<String> rightOptions = wordMatches.get(2);
-				ArrayList<ArrayList<String>> options = new ArrayList<>();
-				options.add(leftOptions);
-				options.add(rightOptions);
-				
-				result += BigramMain.getCenterWord(baseWord.get(0), options);
-			}
-			
-		}*/
-		// BigramMain.printWordsNotFound();
-		
-		
+		// System.out.println(result);
 	}
 }

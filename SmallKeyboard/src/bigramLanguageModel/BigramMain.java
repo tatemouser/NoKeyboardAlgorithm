@@ -9,7 +9,12 @@ import java.util.*;
 public class BigramMain {
   public static BigramLanguageModel lm;
   static Random r = new Random();
-
+  
+  private static boolean isScientificNotation(double value) {
+      String stringValue = String.valueOf(value);
+      return stringValue.toLowerCase().contains("e");
+  }
+  
   public static List<List<String>> readWikitext(String path, int maxLines) {
     System.out.println("Reading and training has started:  Using " + path);
     List<List<String>> lines = new ArrayList<List<String>>();
@@ -163,16 +168,16 @@ public class BigramMain {
 	  int min1Index = 0;
 	  int min2Index = 0;
 	  for(int i = 0; i < leftAndMiddleWord.length; i++) {
-		  //System.out.println(leftAndMiddleWord[i] + " " + min1);
-		  if(leftAndMiddleWord[i] > min1 && leftAndMiddleWord[i] > 0.0000000001) {
+		  // System.out.println(leftAndMiddleWord[i] + " " + min1);
+		  if(leftAndMiddleWord[i] < min1 && leftAndMiddleWord[i] > .00001) {
 			  min1Index = i;
 			  min1 = leftAndMiddleWord[i];
 		  }
 		  
 	  }
 	  for(int i = 0; i < middleAndRightWord.length; i++) {
-		  //System.out.println(middleAndRightWord[i] + " " + min2);
-		  if(middleAndRightWord[i] > min2 && middleAndRightWord[i] > 0.0000000001) {
+		  // System.out.println(middleAndRightWord[i] + " " + min2);
+		  if(middleAndRightWord[i] < min2 && middleAndRightWord[i] > 0.00001) {
 			  min2Index = i;
 			  min2 = middleAndRightWord[i];
 		  }
@@ -182,49 +187,60 @@ public class BigramMain {
   }
 
   /**
-   * Perform operations and add scores -> Find score closest to 1 and return.
+   * Adds operation scores -> Find lowest score that has no scientific notation and return.
    */
   public static String getPriorWord(String base, ArrayList<String> options) {
 	  double[] scores = new double[options.size()];
 	  for(int i = 0; i < options.size(); i++) {
-		  scores[i] = lm.getProbability(options.get(i), base);
+		  scores[i] = lm.getProbability(base, options.get(i));
+		  //System.out.println(base + " " + options.get(i) + " " + scores[i]);
 	  }
 	  
+	  double min = Double.MAX_VALUE;	  
 	  int minIndex = 0;
-	  double min = 100;
 	  
 	  for(int i = 0; i < scores.length; i++) {
 		  double score = scores[i];
 		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
-		  if(score > min && score > 0.0000000001) {
-			  min = score;
-			  minIndex = i;
-		  }
+          if (score < min && score < 0.01 && !isScientificNotation(score)) {
+              min = score;
+              minIndex = i;
+          }
+		  
 	  }
 	  return options.get(minIndex);
   }
   
   /**
-   * Perform operations and add scores -> Find score closest to 1 and return.
+   * Adds operation scores -> Find lowest score that has no scientific notation and return.
    */
   public static String getAfterWord(String base, ArrayList<String> options) {
 	  double[] scores = new double[options.size()];
 	  for(int i = 0; i < options.size(); i++) {
 		  scores[i] = lm.getProbability(base, options.get(i));
+		  System.out.println(base + " " + options.get(i) + " " + scores[i]);
 	  }
 	  
+	  double min = Double.MAX_VALUE;
 	  int minIndex = 0;
-	  double min = 100;
 	  
 	  for(int i = 0; i < scores.length; i++) {
 		  double score = scores[i];
 		  // First condition compares last result, second condition rules out non-existing words. (Invalid scores)
-		  if(score > min && score > 0.0000000001) {
-			  min = score;
-			  minIndex = i;
-		  }
+          if (score < min && score < 0.01 && !isScientificNotation(score)) {
+              min = score;
+              minIndex = i;
+          }
 	  }
 	  return options.get(minIndex);
+  }
+  
+  // Following two classes used in in LinkingMatchesAndBigram for comparing best results.
+  public static double getPriorWordScore(String option, String base) {
+	  return lm.getProbability(option, base);
+  }
+  public static double getAfterWordScore(String base, String option) {
+	  return lm.getProbability(base, option);
   }
 		
   /**
@@ -235,7 +251,7 @@ public class BigramMain {
   public static String getCenterWord(String base, ArrayList<ArrayList<String>> options) {
 	  String result = "";
 	  result += getPriorWord(base, options.get(0));
-	  result += " you ";
+	  result += " " + base + " ";
 	  result += getAfterWord(base, options.get(1));
 	  return result;
   }
