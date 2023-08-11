@@ -6,7 +6,6 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
@@ -14,8 +13,9 @@
 ## Project Description
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The concept of this project is to create an algorithm for a keyboard with only 10 buttons. Each button, as seen below, represents a few letters on the keyboard. This project generates several combinations of words that could be created with numeric input, then selects the words that exist in the program's word bank. Each word in the sentence is linked to a list of these valid combinations. The valid combinations are then run through a bigram language model with the preceding word list. This process creates another list of scores associated with all the combinations between the two lists holding possible words. The best score is used, and the two words that achieved this score are used in the final sentence output.
 
-<pre>The digit 1 represents "a". This word would be added to a list, then it would be searched for in the trie structured word bank. Since "a" is found then it would be returned.
-By entering 73999, the ideal output would be "hello". Although it would produce several variations of this. Here is an example of the letter combination size.</pre>
+The digit 1 represents "a". This word would be added to a list, then it would be searched for in the trie structured word bank. Since "a" is found then it would be returned.
+
+By entering 73999, the ideal output would be "hello". Although it would produce several variations of this. Here is an example of the letter combination size.
 > * Level 1: 6 options (Y, U, H, J, N, M)
 > * Level 2: 3 options for each of the 6 options from Level 1 = 6 * 3 = 18 options (E, D, C)
 > * Level 3: 3 options for each of the 18 options from Level 2 = 18 * 2 = 36 options (O, L)
@@ -25,7 +25,8 @@ By entering 73999, the ideal output would be "hello". Although it would produce 
 
 <img src="https://github.com/tatemouser/NoKeyboardAlgorithm/assets/114375692/a4a03227-d414-4729-b8a6-caeb95af825c" alt="keyboardImage" width="500" height="200">
 
-<pre> If "7970317" is entered. NumToWord finds word combinations for 797 and 317, then operations will perform as seen below. </pre>
+If "7970317" is entered. NumToWord finds word combinations for 797 and 317, then operations will perform as seen below. 
+
 ![diagramBigram](https://github.com/tatemouser/NoKeyboardAlgorithm/assets/114375692/b5934545-0fe2-49b3-9ad6-bab022a67735)
 
 
@@ -38,15 +39,45 @@ By entering 73999, the ideal output would be "hello". Although it would produce 
 - Writing over CSV file.
   
 ## Installation
+    git clone https://github.com/tatemouser/NoKeyboardAlgorithm.git
 
 ## Usage
+#### Packages:
 
-## Contributing
+<pre>
+main:
+&nbsp;&nbsp;&nbsp;Initializes program.
+&nbsp;&nbsp;&nbsp;Converts numbers to words and words to numbers. 
+&nbsp;&nbsp;&nbsp;LinkingMatchesAndBigram calls BigramMain with combinations to get best scores. </pre>
+
+<pre>
+sorting:
+&nbsp;&nbsp;&nbsp;Creates trie to hold dictionary and generated words. Used for adding or removing words. </pre>
+
+<pre>
+bigramLanguageModel:
+&nbsp;&nbsp;&nbsp;BigramLanguageModel trains and builds the data structure.
+&nbsp;&nbsp;&nbsp;BigramMain relays information from the data structure. </pre>
+
+<pre> 
+testing: 
+&nbsp;&nbsp;&nbsp;CustomBigramSet - Can be used for creating combination lists.
+&nbsp;&nbsp;&nbsp;NewWordsTrie - Writes matches to the array, can write matches to CSV when testing.
+&nbsp;&nbsp;&nbsp;trieDictionary - Creates dictionary and can print statistics on the data structure. </pre>
+
+
+Resources - Uses dictionary2, ignores dictionary1.
+
+
+
 
 ## License
 None.
 
 ## Acknowledgments
+Dr.Greg Durrett (Created original outline for building a language model in bigramLanguageModel package) 
+
+Source: https://www.youtube.com/watch?v=7bf5EdQONTM
 
 ## Contact
 tatesmouser@gmail.com
