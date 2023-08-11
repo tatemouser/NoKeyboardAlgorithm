@@ -25,7 +25,7 @@ public class BigramMain {
 	        while (line != null && (maxLines < 0 || numLines < maxLines)) {
 	            if (line.trim().length() > 0) { // Check if the line is not empty
 	                List<String> thisLine = new ArrayList<>(); // List to store tokens in the current line
-	                thisLine.add(BigramLanguageModel.BEGIN_SYMBOL); // Add a special BEGIN_SYMBOL at the beginning
+	                thisLine.add(BigramLanguageModel.BEGIN_SYMBOL); // Add a special BEGIN_SYMBOL at the beginning (symbol- </S>)
 
 	                // Split the line into words based on spaces and process each word
 	                String[] split = line.split(" ");
@@ -35,7 +35,7 @@ public class BigramMain {
 	                    }
 	                }
 
-	                thisLine.add(BigramLanguageModel.END_SYMBOL); // Add a special END_SYMBOL at the end
+	                thisLine.add(BigramLanguageModel.END_SYMBOL); // Add a special END_SYMBOL at the end (symbol- </S>)
 	                lines.add(thisLine); // Add the processed line to the list
 	                numLines += 1; // Increment the line count
 	            }

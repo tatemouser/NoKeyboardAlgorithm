@@ -5,7 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 public class BigramLanguageModel {
-
+ /**
+  * The outer map (bigramCounts) maps a previous word to an inner map.
+  *	The inner map maps a next word to the count of occurrences of that specific bigram.
+  *
+  * If you check to see if "apple pie" exist in the brigram. You would seach "apple" in the outer map, 
+  * if there is an inner map associated with it, then you can look into that inner map to check if "pie" 
+  * is one of the keys. If it is, you retrieve the count of "apple pie" occurrences.
+  */
+	
   // Store counts of bigrams: Map<PreviousWord, Map<NextWord, Count>>
   public final Map<String, Map<String, Integer>> bigramCounts;
 
