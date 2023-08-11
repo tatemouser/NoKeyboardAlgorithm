@@ -101,15 +101,19 @@ public class Index {
 		
 		// Word to number for testing only. Program would normally bypass this step and take in numbers. ("Hello" starts program with 73999)
 		WordToNum words = new WordToNum();
-		String input = words.convert("can you see");
+		String input = words.convert("how do you say hello world");
+		// String input = words.convert("some issues have not been fixed so be careful using large sentences like this");
+		// String input = words.convert("the first thing i would do to correct this would be to create a larger dictionary");
 		
 		// Convert input -> Get word combinations -> Verify combinations with dictionary -> Save matched results to "wordMatches" ArrayList.
 		findAndAddMatches(input);
-		printWordMatches();
 		
 		// Iterate wordMatches -> Test combinations with bigram -> Store best match scores -> Combine and save sentence.
 		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		String result = findMatches.getResult();
+		
+		System.out.println("Input: " + input);
+		printWordMatches();
 		
 		System.out.println("Best Result: " + result);
 		

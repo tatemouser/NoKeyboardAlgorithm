@@ -3,8 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-// Credit: Dr.Greg Durrett (Created original outline for language model)
-// Source: https://www.youtube.com/watch?v=7bf5EdQONTM
 
 public class BigramMain {
 	public static BigramLanguageModel lm; // Static instance of the BigramLanguageModel class for language modeling
