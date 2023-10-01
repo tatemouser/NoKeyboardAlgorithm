@@ -6,7 +6,9 @@ import bigramLanguageModel.*;
 import sorting.Trie;
 import testing.*;
 
-// To-Do: Account for capitalization.
+// TODO: Account for capitalization.
+// TODO: Create UI display
+
 public class Index {
 	private static Trie wordBank;
 	private static String[] wordCombinations;
@@ -91,7 +93,7 @@ public class Index {
 			System.out.println(str);
 			cnt++;
 		}
-		System.out.println("--------------------------------------------------");
+		System.out.println("-------------------------------------------------");
 	}
 	
 	
@@ -118,8 +120,20 @@ public class Index {
 		System.out.println("Best Result: " + result);
 		
 		
-		
 		//customBigramSet temp = new customBigramSet(); // Skip conversion, manual inputs for testing
 		//temp.run();
+		
+		// Testing bigram predictions with manual input and output checking.
+		// TODO:
+		//findModelAccuracy(); 		
+	}
+
+	public static void findModelAccuracy() {
+		findBigramAccuracy runner = new findBigramAccuracy();
+		//runner.runDiagnostics();
+		String[] temp = runner.createSamples();
+		for(int i = 0; i < temp.length; i++) {
+			System.out.println(temp[i]);
+		}
 	}
 }
