@@ -27,7 +27,8 @@ By entering 73999, the ideal output would be "hello". Although it would produce 
 
 If "7970317" is entered. NumToWord finds word combinations for 797 and 317, then operations will perform as seen below. 
 
-![newDiagram](https://github.com/tatemouser/NoKeyboardAlgorithm/assets/114375692/3b33b4fa-88b4-4547-a7ed-03019c8e146b)
+![diagramBigram](https://github.com/tatemouser/NoKeyboardAlgorithm/assets/114375692/b5934545-0fe2-49b3-9ad6-bab022a67735)
+
 
 
 ## Features
