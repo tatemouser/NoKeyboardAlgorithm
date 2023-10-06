@@ -59,8 +59,9 @@ public class Index {
 			if(wordBank.search(word)) temp.add(word);
 		
 		// Auto-Fill if no real words found.
+		// TODO: Buggy when multiply detected
 		if(wordCombinations.length > 0 && temp.size() == 0) {
-			wordCombinations[0] += "\t *WARNING: No word found in dictionary*";
+			wordCombinations[0] += "*NOT FOUND*";
 			temp.add(wordCombinations[0]);
 			wordMatches.add(temp);
 		}
@@ -102,38 +103,52 @@ public class Index {
 		// printLetterToNumber(); // Dev visual
 		
 		// Word to number for testing only. Program would normally bypass this step and take in numbers. ("Hello" starts program with 73999)
-		WordToNum words = new WordToNum();
-		String input = words.convert("how do you say hello world");
+//		WordToNum words = new WordToNum();
+//		String input = words.convert("how do you say hello world");
 		// String input = words.convert("some issues have not been fixed so be careful using large sentences like this");
 		// String input = words.convert("the first thing i would do to correct this would be to create a larger dictionary");
 		
 		// Convert input -> Get word combinations -> Verify combinations with dictionary -> Save matched results to "wordMatches" ArrayList.
-		findAndAddMatches(input);
+//		findAndAddMatches(input);
 		
 		// Iterate wordMatches -> Test combinations with bigram -> Store best match scores -> Combine and save sentence.
-		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
-		String result = findMatches.getResult();
+//		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
+//		String result = findMatches.getResult();
 		
-		System.out.println("Input: " + input);
-		printWordMatches();
+//		System.out.println("Input: " + input);
+//		printWordMatches();
 		
-		System.out.println("Best Result: " + result);
+//		System.out.println("Best Result: " + result);
 		
 		
 		//customBigramSet temp = new customBigramSet(); // Skip conversion, manual inputs for testing
 		//temp.run();
 		
-		// Testing bigram predictions with manual input and output checking.
 		// TODO:
-		//findModelAccuracy(); 		
+		// Testing bigram predictions with manual input and output checking.
+		findModelAccuracy(); 		
 	}
 
 	public static void findModelAccuracy() {
+		// Initialize model and testing set
+		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		findBigramAccuracy runner = new findBigramAccuracy();
-		//runner.runDiagnostics();
-		String[] temp = runner.createSamples();
-		for(int i = 0; i < temp.length; i++) {
-			System.out.println(temp[i]);
+		// Variables to be used
+		String[] correctVals = runner.createSamples();
+		int setSize = correctVals.length;
+		String[] newVals = new String[setSize];
+		// Variable Assignment
+		for(int i = 0; i < setSize; i++) {
+			System.out.println(correctVals[i]);
+		}
+		for(int i = 0; i < setSize; i++) {
+			findAndAddMatches(correctVals[i]);
+			String res = findMatches.getResult();
+			newVals[i] = res;
+			wordMatches.clear();
+		}
+		for(int i = 0; i < setSize; i++) {
+			System.out.println(newVals[i]);
 		}
 	}
 }
