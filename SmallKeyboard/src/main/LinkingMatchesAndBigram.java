@@ -7,6 +7,7 @@ import bigramLanguageModel.*;
 public class LinkingMatchesAndBigram {
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 	private static ArrayList<Double> baseWordScores = new ArrayList<>();
+	private static boolean beenNormalized = false;
 
 	public LinkingMatchesAndBigram(ArrayList<ArrayList<String>> passed) {
 		LinkingMatchesAndBigram.wordMatches = passed;
@@ -100,9 +101,12 @@ public class LinkingMatchesAndBigram {
 	
 	// **Visual and example for finding best sequence of words in customBigramSet class.**
 	public String getResult() {
-		// Initialize and train model with data set.
-		BigramMain bigramMain = new BigramMain();
-				
+		// Initialize and train model with data set. Must be done 1 time, no more or less.
+		if(beenNormalized == false) {
+			BigramMain bigramMain = new BigramMain();
+			beenNormalized = true;
+		}
+		
 		String finalResult = "";
 		
 		// Each index of wordMatches holds a words combinations. Only 1 iteration is needed to get final sentence.

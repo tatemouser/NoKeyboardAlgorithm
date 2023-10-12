@@ -18,7 +18,9 @@ public class WordToNum {
 		// for (Map.Entry<Character, Integer> entry : vals.entrySet()) System.out.println(entry.getKey() + " " + entry.getValue());
 		
 		// System.out.println("Input: " + wordVals);
-		return wordVals;
+		String temp = wordVals;
+		wordVals = "";
+		return temp;
 	}
 	
 	

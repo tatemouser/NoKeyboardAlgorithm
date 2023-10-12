@@ -7,7 +7,7 @@ import java.util.*;
 public class BigramMain {
 	public static BigramLanguageModel lm; // Static instance of the BigramLanguageModel class for language modeling
 	static Random r = new Random(); // Static instance of the Random class for generating random numbers
-
+	
 	// Reads and processes wikitext data from a file
 	public static List<List<String>> readWikitext(String path, int maxLines) {
 	    System.out.println("Reading and training has started: Using " + path);
@@ -183,6 +183,7 @@ public class BigramMain {
   
   // Initialize and train model then check accuracy.
   public BigramMain(){
+	  
 	  List<List<String>> trainLines = readWikitext("resources/wiki.train.tokens", -1);
 	  // List<List<String>> validLines = readWikitext("resources/wiki.valid.tokens", -1);
 	  lm = BigramLanguageModel.estimate(trainLines);

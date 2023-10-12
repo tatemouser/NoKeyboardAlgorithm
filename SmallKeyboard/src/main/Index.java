@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import bigramLanguageModel.*;
 import sorting.Trie;
@@ -13,7 +14,7 @@ public class Index {
 	private static Trie wordBank;
 	private static String[] wordCombinations;
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
-	
+	private static Scanner stdin = new Scanner(System.in);
 	/** 
 	 * Splits word by 0's (representing spaces) -> Locate then send word to getWord() to find its combinations.
 	 * @param input - numbers inputted 
@@ -73,14 +74,15 @@ public class Index {
 	public static void printLetterToNumber() {
 		// Referencing the README keyboard image, each letter is converted and added to a string which is printed.
 		WordToNum words = new WordToNum();
-		words.convert("qaz"); 
-		words.convert("wsx"); 
-		words.convert("edc"); 
-		words.convert("rfvtgb"); 
-		words.convert("yhnujm"); 
-		words.convert("ik"); 
-		words.convert("ol"); 
-		words.convert("p");
+		System.out.println("qaz = " + words.convert("qaz"));
+		System.out.println("wsx = " + words.convert("wsx"));
+		System.out.println("edc = " + words.convert("edc"));
+		System.out.println("rfvtgb = " + words.convert("rfvtgb"));
+		System.out.println("yhnujm = " + words.convert("yhnujm"));
+		System.out.println("ik = " + words.convert("ik"));
+		System.out.println("ol = " + words.convert("ol"));
+		System.out.println("p = " + words.convert("p"));
+
 	}
 	
 	// Each row printed represents combinations for word number.
@@ -97,39 +99,50 @@ public class Index {
 		System.out.println("-------------------------------------------------");
 	}
 	
-	
-	
-	public static void main(String[] args) {
-		// printLetterToNumber(); // Dev visual
-		
+	public static void NormalMode() {		
 		// Word to number for testing only. Program would normally bypass this step and take in numbers. ("Hello" starts program with 73999)
-//		WordToNum words = new WordToNum();
-//		String input = words.convert("how do you say hello world");
+		WordToNum words = new WordToNum();
+		String input = words.convert("how do you say hello world");
 		// String input = words.convert("some issues have not been fixed so be careful using large sentences like this");
 		// String input = words.convert("the first thing i would do to correct this would be to create a larger dictionary");
 		
 		// Convert input -> Get word combinations -> Verify combinations with dictionary -> Save matched results to "wordMatches" ArrayList.
-//		findAndAddMatches(input);
+		findAndAddMatches(input);
 		
 		// Iterate wordMatches -> Test combinations with bigram -> Store best match scores -> Combine and save sentence.
-//		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
-//		String result = findMatches.getResult();
+		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
+		String result = findMatches.getResult();
 		
-//		System.out.println("Input: " + input);
-//		printWordMatches();
+		System.out.println("Input: " + input);
+		printWordMatches();
 		
-//		System.out.println("Best Result: " + result);
-		
-		
-		//customBigramSet temp = new customBigramSet(); // Skip conversion, manual inputs for testing
-		//temp.run();
-		
-		// TODO:
-		// Testing bigram predictions with manual input and output checking.
-		findModelAccuracy(); 		
+		System.out.println("Best Result: " + result);
 	}
 
-	public static void findModelAccuracy() {
+	//TODO: Move other test from normal mode to testing mode.
+	public static void TestingMode() {
+		// TODO: Build Custome Set / accuracy reading
+		int mode = -1;
+		while(mode!=1 && mode!=2 && mode!=3) {
+			System.out.println("Enter 1-3");
+			System.out.println("1: Build Custom Set:");
+			System.out.println("2: Show Conversion Visual:");
+			System.out.println("3: Check Accuracy of Language Model:");
+			mode = stdin.nextInt();
+		}
+		if(mode == 1) {
+			// Skip conversion, manual inputs for testing
+			customBigramSet temp = new customBigramSet(); 
+			temp.run();
+		}
+		if(mode == 2) {
+			// Shows conversion from letters to numbers
+			printLetterToNumber(); 
+		}
+		if(mode == 3) {
+			
+		}
+		/*
 		// Initialize model and testing set
 		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		findBigramAccuracy runner = new findBigramAccuracy();
@@ -149,6 +162,20 @@ public class Index {
 		}
 		for(int i = 0; i < setSize; i++) {
 			System.out.println(newVals[i]);
+		}*/
+	}
+	
+	public static void main(String[] args) {
+		String mode = "";
+		
+		while(!mode.equals("Y") && !mode.equals("N")) {
+		System.out.println("Type \"Y\" to enter normal mode");
+		System.out.println("Type \"N\" to enter testing mode");
+		mode = stdin.next();
 		}
+		
+		if(mode.equals("Y")) {
+			NormalMode();
+		} else TestingMode();
 	}
 }

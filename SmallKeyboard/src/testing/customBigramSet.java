@@ -19,8 +19,6 @@ public class customBigramSet {
 	 */
 	
 	public void run() {
-		// Initialize and train model with data set.
-		BigramMain bigramMain = new BigramMain();
 		ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 		
 		ArrayList<String> temp1 = new ArrayList<>();
