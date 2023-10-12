@@ -25,12 +25,9 @@ public class findBigramAccuracy {
 		return sentenceSet;
 	}
 	
-	public void runSamples() {
-		
-	}
-	
-	public void runDiagnostics() {
-		// TODO: Run inputs through application
-		// TODO: Compare outputs to correct outputs (% accuracy / manual comparison)
+	public void compareAndPrint(String[] originalSets, String[] oldSets) {
+		//TODO: Compare outputs to correct outputs (% accuracy / manual comparison)
+
+		System.out.println("Comparing Now");
 	}
 }

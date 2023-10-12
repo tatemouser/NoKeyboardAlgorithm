@@ -62,7 +62,8 @@ public class Index {
 		// Auto-Fill if no real words found.
 		// TODO: Buggy when multiply detected
 		if(wordCombinations.length > 0 && temp.size() == 0) {
-			wordCombinations[0] += "*NOT FOUND*";
+			//wordCombinations[0] += "*NOT FOUND*";
+			// TODO: Integrate to modes when needed (not needed for certain testing, needed for normal mode)
 			temp.add(wordCombinations[0]);
 			wordMatches.add(temp);
 		}
@@ -140,42 +141,63 @@ public class Index {
 			printLetterToNumber(); 
 		}
 		if(mode == 3) {
+			// Initialize model and testing set
+			LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
+			findBigramAccuracy runner = new findBigramAccuracy();
 			
+			// Hold initial words
+			String[] correctVals = runner.createSamples();
+			int setSize = correctVals.length;
+			// Holds words ran through model
+			String[] newVals = new String[setSize];
+			
+			// Show numbers 
+//			for(int i = 0; i < setSize; i++) {
+//				System.out.println(correctVals[i]);
+//			}
+			
+			// Run words in correctVals through model, assign to newVals
+			for(int i = 0; i < setSize; i++) {
+				findAndAddMatches(correctVals[i]);
+				String res = findMatches.getResult();
+				newVals[i] = res;
+				wordMatches.clear();
+			}
+			
+			// Print words found from running through
+//			for(int i = 0; i < setSize; i++) {
+//				System.out.println(newVals[i]);
+//			}
+			
+			// TODO: Compare word sets
+			runner.compareAndPrint(correctVals, newVals);
 		}
-		/*
-		// Initialize model and testing set
-		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
-		findBigramAccuracy runner = new findBigramAccuracy();
-		// Variables to be used
-		String[] correctVals = runner.createSamples();
-		int setSize = correctVals.length;
-		String[] newVals = new String[setSize];
-		// Variable Assignment
-		for(int i = 0; i < setSize; i++) {
-			System.out.println(correctVals[i]);
-		}
-		for(int i = 0; i < setSize; i++) {
-			findAndAddMatches(correctVals[i]);
-			String res = findMatches.getResult();
-			newVals[i] = res;
-			wordMatches.clear();
-		}
-		for(int i = 0; i < setSize; i++) {
-			System.out.println(newVals[i]);
-		}*/
 	}
 	
 	public static void main(String[] args) {
 		String mode = "";
+		Boolean restart = true;
 		
-		while(!mode.equals("Y") && !mode.equals("N")) {
-		System.out.println("Type \"Y\" to enter normal mode");
-		System.out.println("Type \"N\" to enter testing mode");
-		mode = stdin.next();
+		while(restart == true) {
+			while(!mode.equals("Y") && !mode.equals("N")) {
+			System.out.println("Type \"Y\" to enter normal mode");
+			System.out.println("Type \"N\" to enter testing mode");
+			mode = stdin.next();
+			}
+			
+			if(mode.equals("Y")) {
+				NormalMode();
+			} else TestingMode();
+			
+			// End of program
+			String nav1 = "";
+			while(!nav1.equals("Done")) {
+				System.out.println("Type \"Done\" to go home.");
+				nav1 = stdin.next();
+			}
+			// User chose to restart 
+			mode = "";
+			wordMatches.clear();
 		}
-		
-		if(mode.equals("Y")) {
-			NormalMode();
-		} else TestingMode();
 	}
 }
