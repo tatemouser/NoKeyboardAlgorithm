@@ -56,18 +56,19 @@ public class Index {
 	// Iterates array -> Stores matches in temp array -> Add array of valid combinations to wordMatches.
 	public static void findMatches() {
 		ArrayList<String> temp = new ArrayList<>();
+		
 		for(String word: wordCombinations) 
 			if(wordBank.search(word)) temp.add(word);
 		
 		// Auto-Fill if no real words found.
 		// TODO: Buggy when multiply detected
 		if(wordCombinations.length > 0 && temp.size() == 0) {
-			//wordCombinations[0] += "*NOT FOUND*";
 			// TODO: Integrate to modes when needed (not needed for certain testing, needed for normal mode)
 			temp.add(wordCombinations[0]);
+			System.out.println(wordCombinations.length);
 			wordMatches.add(temp);
 		}
-		
+
 		wordMatches.add(temp);
 	}
 	
@@ -170,7 +171,7 @@ public class Index {
 //			}
 			
 			// TODO: Compare word sets
-			runner.compareAndPrint(correctVals, newVals);
+			runner.compareAndPrint(newVals);
 		}
 	}
 	
