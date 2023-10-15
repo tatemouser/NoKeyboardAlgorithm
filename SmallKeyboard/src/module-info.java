@@ -6,4 +6,5 @@
  *
  */
 module SmallKeyboard {
+	requires swt;
 }

@@ -6,6 +6,7 @@ import java.util.Scanner;
 import bigramLanguageModel.*;
 import sorting.Trie;
 import testing.*;
+import display.*;
 
 // TODO: Account for capitalization.
 // TODO: Create UI display
@@ -178,6 +179,10 @@ public class Index {
 	public static void main(String[] args) {
 		String mode = "";
 		Boolean restart = true;
+		
+		//TODO: Integrate
+		UIWindow run = new UIWindow();
+		run.run();
 		
 		while(restart == true) {
 			while(!mode.equals("Y") && !mode.equals("N")) {
