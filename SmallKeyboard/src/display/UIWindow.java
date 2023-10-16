@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
 public class UIWindow {
@@ -35,17 +36,20 @@ public class UIWindow {
 
         Text textBox = new Text(shell, SWT.BORDER);
         GridData textGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        //textGridData.horizontalSpan = 2;
+        //textGridData.horizontalSpan = 6;
         textBox.setLayoutData(textGridData);
 
         Button enterButton = new Button(shell, SWT.PUSH);
         enterButton.setText("Enter");
 
-
+        Label resultLabel = new Label(shell, SWT.NONE);
+        resultLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        
         enterButton.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
                 if (event.widget == enterButton) {
                     enteredText = textBox.getText(); // Assign the text to the variable
+                    resultLabel.setText("Original Input: " + enteredText);
                     System.out.println("Entered text: " + enteredText); // For demonstration
                 }
             }
