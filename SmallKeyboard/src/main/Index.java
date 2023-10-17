@@ -101,26 +101,6 @@ public class Index {
 		}
 		System.out.println("-------------------------------------------------");
 	}
-	
-	public static void NormalMode() {		
-		// Word to number for testing only. Program would normally bypass this step and take in numbers. ("Hello" starts program with 73999)
-		WordToNum words = new WordToNum();
-		String input = words.convert("how do you say hello world");
-		// String input = words.convert("some issues have not been fixed so be careful using large sentences like this");
-		// String input = words.convert("the first thing i would do to correct this would be to create a larger dictionary");
-		
-		// Convert input -> Get word combinations -> Verify combinations with dictionary -> Save matched results to "wordMatches" ArrayList.
-		findAndAddMatches(input);
-		
-		// Iterate wordMatches -> Test combinations with bigram -> Store best match scores -> Combine and save sentence.
-		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
-		String result = findMatches.getResult();
-		
-		System.out.println("Input: " + input);
-		printWordMatches();
-		
-		System.out.println("Best Result: " + result);
-	}
 
 	//TODO: Move other test from normal mode to testing mode.
 	public static void TestingMode() {
@@ -176,13 +156,60 @@ public class Index {
 		}
 	}
 	
+	public static void ConsoleMode() {		
+		// Word to number for testing only. Program would normally bypass this step and take in numbers. ("Hello" starts program with 73999)
+		WordToNum words = new WordToNum();
+		String input = words.convert("how do you say hello world");
+		// String input = words.convert("some issues have not been fixed so be careful using large sentences like this");
+		// String input = words.convert("the first thing i would do to correct this would be to create a larger dictionary");
+		
+		// Convert input -> Get word combinations -> Verify combinations with dictionary -> Save matched results to "wordMatches" ArrayList.
+		findAndAddMatches(input);
+		
+		// Iterate wordMatches -> Test combinations with bigram -> Store best match scores -> Combine and save sentence.
+		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
+		String result = findMatches.getResult();
+		
+		System.out.println("Input: " + input);
+		printWordMatches();
+		
+		System.out.println("Best Result: " + result);
+	}
+	
+	// Documentation for methods and structure are found in consoleMode method. Mirror implementation of GUIMode().
+	public String[] GUIMode(String inputString) {
+		// Assign input
+		String[] output = new String[3];
+		output[0] = inputString;
+		
+		// Assign Word to Num Conversion
+		WordToNum words = new WordToNum();
+		output[1] = words.convert(inputString);
+		
+		
+		// Assign Num to Word Conversion
+		findAndAddMatches(output[1]);
+		
+		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
+		String result = findMatches.getResult();
+		output[2] = result;
+		
+		// Clear for future inputs //TODO: Could be used to display options that it is choosing in UI
+		wordMatches.clear();
+		return output;
+	}
+	
 	public static void main(String[] args) {
+
+		
+		System.out.println("Running Display");
+		UIWindow run = new UIWindow();
+		run.run();
+		
+		// Following is for console input implementation
 		String mode = "";
 		Boolean restart = true;
 		
-		//TODO: Integrate
-		UIWindow run = new UIWindow();
-		run.run();
 		
 		while(restart == true) {
 			while(!mode.equals("Y") && !mode.equals("N")) {
@@ -192,7 +219,7 @@ public class Index {
 			}
 			
 			if(mode.equals("Y")) {
-				NormalMode();
+				ConsoleMode();
 			} else TestingMode();
 			
 			// End of program
