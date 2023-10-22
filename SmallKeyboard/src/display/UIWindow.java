@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Label;
 
 public class UIWindow {
     private String enteredText = ""; // Variable to store the entered text
+    private Button enterButton;
+    private Text textBox;
     private Display display = new Display();
     private Shell shell = new Shell(display);
     
@@ -35,6 +37,17 @@ public class UIWindow {
         shell.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_GRAY));
     }
     
+    public void initializeShell() {
+        shell.open();
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch()) { 
+            	display.sleep();
+        	}
+        }
+        display.dispose();
+        System.out.println("Display Closed");
+    }
+    
     public void setText(Label input, GridData outputData) {
         input.setLayoutData(outputData);
         input.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -42,7 +55,7 @@ public class UIWindow {
     
     public void displayBackgroundWithColor() {
         Label horizontalGridLine = new Label(shell, SWT.NONE);
-        horizontalGridLine.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_GRAY));
+        horizontalGridLine.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_RED));
         horizontalGridLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
     }
     
@@ -52,64 +65,63 @@ public class UIWindow {
     	temp.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_RED));
     }
     
-    private void createInputLabel(Composite parent, String labelText) {
+    private void fillSecondComposite(Composite parent, String labelText) {
         Label input = new Label(parent, SWT.CENTER);
         input.setText(labelText);
         GridData inputData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
         setText(input, inputData);
     }
     
-    public void run() {
-
-    	setShell();
-    	
-    	Composite parentComposite = new Composite(shell, SWT.NONE);
-    	GridData parentGridData = new GridData(SWT.FILL, SWT.FILL, true, true); // Use SWT.FILL for horizontal and vertical alignment
-    	parentComposite.setLayoutData(parentGridData);
-    	parentComposite.setLayout(new GridLayout(1, false)); // Single column for stacking
-    	// Create two row composites
-    	Composite inputComposite = new Composite(parentComposite, SWT.NONE);
-    	addCompositeRow(inputComposite);
-    	
-    	Composite outputTitleComposite = new Composite(parentComposite, SWT.NONE);
-    	addCompositeRow(outputTitleComposite);
-    	
-    	Composite outputComposite = new Composite(parentComposite, SWT.NONE);
-    	addCompositeRow(outputComposite);
-
-
-    	
-    	
-    	
-    	// Input Label / Text Box / Enter Button
+    // Fills row one with Input Label / Text Box / Enter Button
+	public void fillFirstComposite(Composite inputComposite) {
     	Label inputLabel = new Label(inputComposite, SWT.RIGHT); 
     	inputLabel.setText("Type Sentence");
     	GridData inputLabelData = new GridData(SWT.FILL, SWT.CENTER, false, false);
-    	inputLabelData.widthHint = 100; 
     	inputLabel.setLayoutData(inputLabelData);
     	inputLabel.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_GRAY));
 
     	Text textBox = new Text(inputComposite, SWT.BORDER | SWT.SINGLE); 
     	GridData textBoxData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-    	textBoxData.minimumWidth = 200;
     	textBox.setLayoutData(textBoxData);
     	textBox.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
     	textBox.setText("how do you say hello world");
-
+    	this.textBox = textBox;
+    	
     	Button enterButton = new Button(inputComposite, SWT.NONE); 
     	enterButton.setText("Enter");
     	shell.setDefaultButton(enterButton);
     	GridData enterButtonData = new GridData(SWT.FILL, SWT.CENTER, false, false);
     	enterButton.setLayoutData(enterButtonData);
+    	this.enterButton = enterButton;
+	}
+    
+    public void run() {
+    	setShell();
+    	
+    	// Create parent composite and rows within
+    	Composite parentComposite = new Composite(shell, SWT.NONE);
+    	GridData parentGridData = new GridData(SWT.FILL, SWT.FILL, true, true); 
+    		parentComposite.setLayoutData(parentGridData);
+    		parentComposite.setLayout(new GridLayout(1, false)); 
+    	
+    	Composite inputComposite = new Composite(parentComposite, SWT.NONE);
+    		addCompositeRow(inputComposite);
+    	
+    	Composite outputTitleComposite = new Composite(parentComposite, SWT.NONE);
+    		addCompositeRow(outputTitleComposite);
+    	
+    	Composite outputComposite = new Composite(parentComposite, SWT.NONE);
+    		addCompositeRow(outputComposite);
+    	
 
-        // Titles of outputs
-    	createInputLabel(outputTitleComposite, "Input");
-    	createInputLabel(outputTitleComposite, "Word to Number");
-    	createInputLabel(outputTitleComposite, "Number to Word");
+    	// Fill composites
+    	fillFirstComposite(inputComposite);
     	
-    	
+    	fillSecondComposite(outputTitleComposite, "Input");
+    	fillSecondComposite(outputTitleComposite, "Word to Number");
+    	fillSecondComposite(outputTitleComposite, "Number to Word");
         	
-        // Changing Text Boxes -> Show input / Show num to word / Show word to num
+        // Third composite, Show input / Show num to word / Show word to num
     	Label input = new Label(outputComposite, SWT.BEGINNING);
     	GridData inputData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
     	setText(input, inputData);
@@ -122,8 +134,9 @@ public class UIWindow {
     	GridData outputData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
     	setText(output, outputData);
 
+    	
         
-        // Mutating User Input	
+        // Receive input for first composite
         enterButton.addListener(SWT.Selection, event -> {
         	String[] vals = new String[3];
         	vals[0] = textBox.getText().trim();
@@ -136,31 +149,9 @@ public class UIWindow {
             output.setText(vals[2]);
         });
         
-//        Composite thirdRowComposite = new Composite(shell, SWT.NONE);
-//        thirdRowComposite.setLayout(new GridLayout(2, true)); // Two columns for the two buttons
-//        thirdRowComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-//        
-//        Button showWordToNum = new Button(shell, SWT.CENTER);
-//        showWordToNum.setText("Enter");
-//    	shell.setDefaultButton(showWordToNum);
-//    	showWordToNum.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-//    	
-//        Button showNumToWord = new Button(shell, SWT.CENTER);
-//        showNumToWord.setText("Enter");
-//    	shell.setDefaultButton(showNumToWord);
-//    	showNumToWord.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-        
+        // Non-essential Code
         displayBackgroundWithColor();
         
-        
-        // Initialize shell
-        shell.open();
-        while (!shell.isDisposed()) {
-            if (!display.readAndDispatch()) { 
-            	display.sleep();
-        	}
-        }
-        display.dispose();
-        System.out.println("Display Closed");
+        initializeShell();
     }
 }
