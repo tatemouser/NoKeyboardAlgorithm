@@ -1,6 +1,8 @@
 package display;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -20,9 +22,8 @@ public class RowOne {
 	private Composite parent;
 	private Composite parentComposite;
     private Button enterButton;
-    private Text textBox;    
+    private Text textBox;         
     
-     
     // Quick adding of composites to parent
     public void addCompositeRow(Composite temp) {
     	temp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -47,7 +48,6 @@ public class RowOne {
     	
     	Button enterButton = new Button(inputComposite, SWT.NONE); 
     	enterButton.setText("Enter");
-    	//parent.setDefaultButton(enterButton);
     	enterButton.setBounds(10, 10, 100, 40); // Set the x, y, width, and height
     	this.enterButton = enterButton;
 	}
@@ -81,7 +81,7 @@ public class RowOne {
         // Reference to row one main composite
     	this.parentComposite = new Composite(parent, SWT.FLAT);
     	
-    	GridData parentGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+    	GridData parentGridData = new GridData(SWT.FILL, SWT.FILL, true, false); //Set false to remove extra space, compact composite
     		parentComposite.setLayoutData(parentGridData);
     		parentComposite.setLayout(new GridLayout(1, false));
 
@@ -116,21 +116,21 @@ public class RowOne {
     	setText(output, outputData);
 
     	
-        enterButton.addTraverseListener(new TraverseListener() {
+        enterButton.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void keyTraversed(TraverseEvent event) {
-                if (event.detail == SWT.TRAVERSE_RETURN) {
-                	String[] vals = new String[3];
-                	vals[0] = textBox.getText().trim();
-                	
-                    Index runner = new Index();
-                    vals = runner.GUIMode(vals[0]);
-                    
-                    input.setText(vals[0]);
-                    inputConversion.setText(vals[1]);
-                    output.setText(vals[2]);
+            public void widgetSelected(SelectionEvent e) {
+                // Handle the button click event here
+                String[] vals = new String[3];
+                vals[0] = textBox.getText().trim();
+                
+                Index runner = new Index();
+                vals = runner.GUIMode(vals[0]);
+                
+                input.setText(vals[0]);
+                inputConversion.setText(vals[1]);
+                output.setText(vals[2]);  
+                UIWindow.updateWindow();
                 }
-            }
         });
     }
 }

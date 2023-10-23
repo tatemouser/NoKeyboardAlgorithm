@@ -19,6 +19,7 @@ public class UIWindow {
 
     private Display display = new Display();
     private Shell shell = new Shell(display);
+    private static RowTwo rowTwo;
     
     // Shell demensions
     public void setShell() {
@@ -50,6 +51,11 @@ public class UIWindow {
         System.out.println("Display Closed");
     }
     
+    public static void updateWindow() {
+    	rowTwo.addButton();
+    }
+
+    
     public void run() {
     	setShell();
 
@@ -63,10 +69,9 @@ public class UIWindow {
         RowOne rowOne = new RowOne(parentComposite);
         rowOne.setBackgroundColor(SWT.COLOR_RED);
         
-        RowOne temp = new RowOne(parentComposite);
-        temp.setBackgroundColor(SWT.COLOR_BLUE);
-
-    	
+        
+        UIWindow.rowTwo = new RowTwo(parentComposite);
+        rowTwo.setBackgroundColor(SWT.COLOR_YELLOW);
     	
     	
     	shell.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
