@@ -54,6 +54,10 @@ public class UIWindow {
     public static void updateWindow() {
     	rowTwo.addButton();
     }
+    
+    public static void passVals(String[] vals) {
+    	rowTwo.getVals(vals);
+    }
 
     
     public void run() {

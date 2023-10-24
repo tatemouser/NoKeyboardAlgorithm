@@ -128,7 +128,8 @@ public class RowOne {
                 
                 input.setText(vals[0]);
                 inputConversion.setText(vals[1]);
-                output.setText(vals[2]);  
+                output.setText(vals[2]);
+                UIWindow.passVals(vals);
                 UIWindow.updateWindow();
                 }
         });

@@ -14,6 +14,7 @@ public class RowTwo {
 	private Composite parent;
 	private Composite parentComposite;
 	private Composite leftComp;
+	private String[] vals;
 	
     public void setBackgroundColor(int swtColorConstant) {
         if (parentComposite != null) {
@@ -21,6 +22,10 @@ public class RowTwo {
             Color color = Display.getCurrent().getSystemColor(swtColorConstant);
             parentComposite.setBackground(color);
         }
+    }
+    
+    public void getVals(String[] vals) {
+    	this.vals = vals;
     }
     
     private void fillSecondComposite(Composite parent, String labelText) {
@@ -43,23 +48,25 @@ public class RowTwo {
     	leftComp.setBackground(leftCol.getDisplay().getSystemColor(SWT.COLOR_BLACK));
     	
     	Label title = new Label(leftComp, SWT.NONE);
-    	title.setText("Show Conversions:");
-    	
-    	Button button1 = new Button(leftComp, SWT.NONE); 
-    	button1.setText("Enter");
-    	button1.setBounds(10, 10, 100, 40); // Set the x, y, width, and height
-    	
-    	Button button2 = new Button(leftComp, SWT.NONE); 
-    	button2.setText("Enter");
-    	button2.setBounds(10, 10, 100, 40); // Set the x, y, width, and height
-    	
+    	title.setText("Show Conversions:");	
         
     }
  
     public void addButton() {
-    	Button button3 = new Button(leftComp, SWT.NONE); 
-    	button3.setText("Enter");
-    	button3.setBounds(10, 10, 100, 40); // Set the x, y, width, and height
+    	if(vals[2] != null) {
+            String[] words = vals[2].split(" ");
+    		
+	    	for (int i = 0; i < words.length; i++) {
+	    	    Button button = new Button(leftComp, SWT.NONE);
+	    	    button.setText(words[i]); // Set a label for the button
+	
+	    	    // Set the button's size and any other properties as needed
+	    	    GridData buttonData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+	    	    buttonData.widthHint = 100; // Set the width
+	    	    buttonData.heightHint = 40; // Set the height
+	    	    button.setLayoutData(buttonData);
+	    	}
+    	} else System.out.println("Error: Could not pass input to rowTwo class for button assignment.");
     	leftComp.layout();
     }
     
@@ -78,9 +85,12 @@ public class RowTwo {
     	
     	Composite leftCol = new Composite(parentComposite, SWT.NONE);
     	leftCol.setLayout(new GridLayout(1, false));
+    	leftCol.setLayout(new FillLayout(SWT.VERTICAL)); // Use FillLayout with SWT.VERTICAL style
+
     	GridData comp1Grid = new GridData(SWT.BEGINNING, SWT.FILL, true, true);
     	leftCol.setLayoutData(comp1Grid);
     	leftCol.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
+
 
     	fillLeftCol(leftCol);
     	
