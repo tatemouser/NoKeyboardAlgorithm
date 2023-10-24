@@ -1,5 +1,7 @@
 package display;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
@@ -10,11 +12,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class RowTwo {
+public class RowTwo  {
 	private Composite parent;
 	private Composite parentComposite;
 	private Composite leftComp;
 	private String[] vals;
+	//TODO: Extend these two classes to UIWindow
+
 	
     public void setBackgroundColor(int swtColorConstant) {
         if (parentComposite != null) {
@@ -28,28 +32,10 @@ public class RowTwo {
     	this.vals = vals;
     }
     
-    private void fillSecondComposite(Composite parent, String labelText) {
-        Label input = new Label(parent, SWT.CENTER);
-        input.setText(labelText);
-        GridData inputData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-        input.setLayoutData(inputData);
-        input.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-    }
-    
     public void addCompositeRow(Composite temp) {
     	temp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     	temp.setLayout(new GridLayout(3, true)); // 3 columns in the second row
     	temp.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
-    }
-    
-    public void fillLeftCol(Composite leftCol) {
-    	this.leftComp = new Composite(leftCol, SWT.NONE);
-    	leftComp.setLayout(new FillLayout(SWT.VERTICAL)); // Use FillLayout with SWT.VERTICAL style
-    	leftComp.setBackground(leftCol.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-    	
-    	Label title = new Label(leftComp, SWT.NONE);
-    	title.setText("Show Conversions:");	
-        
     }
  
     public void addButton() {
@@ -65,9 +51,20 @@ public class RowTwo {
 	    	    buttonData.widthHint = 100; // Set the width
 	    	    buttonData.heightHint = 40; // Set the height
 	    	    button.setLayoutData(buttonData);
+	    	    
 	    	}
     	} else System.out.println("Error: Could not pass input to rowTwo class for button assignment.");
     	leftComp.layout();
+    }
+    
+    
+    public void fillLeftCol(Composite leftCol) {
+    	this.leftComp = new Composite(leftCol, SWT.NONE);
+    	leftComp.setLayout(new FillLayout(SWT.VERTICAL)); // Use FillLayout with SWT.VERTICAL style
+    	leftComp.setBackground(leftCol.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+    	
+    	Label title = new Label(leftComp, SWT.NONE);
+    	title.setText("Show Conversions:");	
     }
     
 	
@@ -84,18 +81,23 @@ public class RowTwo {
 
     	
     	Composite leftCol = new Composite(parentComposite, SWT.NONE);
-    	leftCol.setLayout(new GridLayout(1, false));
-    	leftCol.setLayout(new FillLayout(SWT.VERTICAL)); // Use FillLayout with SWT.VERTICAL style
-
+    		leftCol.setLayout(new GridLayout(1, false));
+    		leftCol.setLayout(new FillLayout(SWT.VERTICAL)); // Use FillLayout with SWT.VERTICAL style
     	GridData comp1Grid = new GridData(SWT.BEGINNING, SWT.FILL, true, true);
-    	leftCol.setLayoutData(comp1Grid);
-    	leftCol.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
-
+    		leftCol.setLayoutData(comp1Grid);
+    		leftCol.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
 
     	fillLeftCol(leftCol);
     	
-    	Composite comp2 = new Composite(parentComposite, SWT.FILL);
-        comp2.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_RED));
+    	Composite rightCol = new Composite(parentComposite, SWT.NONE);
+    		rightCol.setLayout(new GridLayout(1, false));
+    		rightCol.setLayout(new FillLayout(SWT.VERTICAL)); // Use FillLayout with SWT.VERTICAL style
+    	GridData comp2Grid = new GridData(SWT.BEGINNING, SWT.FILL, true, true);
+    		rightCol.setLayoutData(comp2Grid);
+    		rightCol.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
+    	
+    	// Row two calls update window in UIWindow, upon button press. This triggers row two to update.
+    	//fillRightCol(rightCol);
         
     }
 }

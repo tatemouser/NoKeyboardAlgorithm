@@ -1,5 +1,7 @@
 package display;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
@@ -15,8 +17,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class UIWindow {
-
+public class UIWindow extends Index {
+	//TODO: Fix multiple clicks of button, removing old buttons
     private Display display = new Display();
     private Shell shell = new Shell(display);
     private static RowTwo rowTwo;
@@ -59,7 +61,6 @@ public class UIWindow {
     	rowTwo.getVals(vals);
     }
 
-    
     public void run() {
     	setShell();
 

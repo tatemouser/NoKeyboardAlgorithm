@@ -16,6 +16,9 @@ public class Index {
 	private static String[] wordCombinations;
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 	private static Scanner stdin = new Scanner(System.in);
+	private static UIWindow run;
+	protected static ArrayList<ArrayList<String>> wordMatchesUIOnly = wordMatches;
+	
 	/** 
 	 * Splits word by 0's (representing spaces) -> Locate then send word to getWord() to find its combinations.
 	 * @param input - numbers inputted 
@@ -101,6 +104,7 @@ public class Index {
 		}
 		System.out.println("-------------------------------------------------");
 	}
+	
 
 	//TODO: Move other test from normal mode to testing mode.
 	public static void TestingMode() {
@@ -190,6 +194,9 @@ public class Index {
 		// Assign Num to Word Conversion
 		findAndAddMatches(output[1]);
 		
+		wordMatchesUIOnly = wordMatches;
+		System.out.println(wordMatchesUIOnly); //TODO: Pass to row two
+		
 		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		String result = findMatches.getResult();
 		output[2] = result;
@@ -203,9 +210,9 @@ public class Index {
 
 		
 		System.out.println("Running Display");
-		UIWindow run = new UIWindow();
+		run = new UIWindow();
 		run.run();
-		
+
 		// Following is for console input implementation
 		String mode = "";
 		Boolean restart = true;
