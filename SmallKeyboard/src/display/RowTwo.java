@@ -12,12 +12,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class RowTwo  {
+public class RowTwo {
 	private Composite parent;
 	private Composite parentComposite;
 	private Composite leftComp;
 	private String[] vals;
+    private static ArrayList<ArrayList<String>> wordMatchesUIOnly;
 	//TODO: Extend these two classes to UIWindow
+
+    public void setWordMatchesUIOnly(ArrayList<ArrayList<String>> wordSet) {
+    	wordMatchesUIOnly = wordSet;
+    }
 
 	
     public void setBackgroundColor(int swtColorConstant) {
@@ -55,6 +60,7 @@ public class RowTwo  {
 	    	}
     	} else System.out.println("Error: Could not pass input to rowTwo class for button assignment.");
     	leftComp.layout();
+    	System.out.println(wordMatchesUIOnly.size());
     }
     
     

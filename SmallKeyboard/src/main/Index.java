@@ -17,7 +17,7 @@ public class Index {
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 	private static Scanner stdin = new Scanner(System.in);
 	private static UIWindow run;
-	protected static ArrayList<ArrayList<String>> wordMatchesUIOnly = wordMatches;
+    protected static ArrayList<ArrayList<String>> wordMatchesUIOnly = new ArrayList<>();
 	
 	/** 
 	 * Splits word by 0's (representing spaces) -> Locate then send word to getWord() to find its combinations.
@@ -194,8 +194,11 @@ public class Index {
 		// Assign Num to Word Conversion
 		findAndAddMatches(output[1]);
 		
-		wordMatchesUIOnly = wordMatches;
-		System.out.println(wordMatchesUIOnly); //TODO: Pass to row two
+		// Fill wordMatchesUIOnly
+        for (ArrayList<String> innerList : wordMatches) {
+            ArrayList<String> copiedInnerList = new ArrayList<>(innerList);
+            wordMatchesUIOnly.add(copiedInnerList);
+        }
 		
 		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		String result = findMatches.getResult();

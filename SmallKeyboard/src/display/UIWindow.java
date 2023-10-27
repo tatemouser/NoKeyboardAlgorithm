@@ -22,7 +22,7 @@ public class UIWindow extends Index {
     private Display display = new Display();
     private Shell shell = new Shell(display);
     private static RowTwo rowTwo;
-    
+
     // Shell demensions
     public void setShell() {
         int screenWidth = shell.getDisplay().getClientArea().width;
@@ -54,6 +54,7 @@ public class UIWindow extends Index {
     }
     
     public static void updateWindow() {
+    	rowTwo.setWordMatchesUIOnly(wordMatchesUIOnly);    	
     	rowTwo.addButton();
     }
     
