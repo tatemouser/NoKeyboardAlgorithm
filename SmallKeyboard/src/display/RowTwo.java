@@ -58,34 +58,35 @@ public class RowTwo {
     public void addButton() {
     	if(vals[2] != null) {
             String[] words = vals[2].split(" ");
-            // This
             List<Runnable> buttonActions = new ArrayList<>();
 
 	    	for (int i = 0; i < words.length; i++) {
-	    		// this
-	            final int index = i; // Declare index inside the loop
+	            final int index = i; 
 
 	    	    Button wordButton = new Button(leftComp, SWT.NONE);
 	    	    
-	    	    wordButton.setText(words[i]); // Set a label for the button
+	    	    wordButton.setText(words[i]);
 	
-	    	    // Set the button's size and any other properties as needed
 	    	    GridData buttonData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
-	    	    buttonData.widthHint = 100; // Set the width
-	    	    buttonData.heightHint = 40; // Set the height        
+	    	    buttonData.widthHint = 100; 
+	    	    buttonData.heightHint = 40;     
 	    	    
 	    	    wordButton.setLayoutData(buttonData);
 	    	    
-	    	    // These
 	            buttonActions.add(() -> {
-	                // Define the action for the button
-	                System.out.println("Button " + (index + 1) + " was clicked.");
+	                //System.out.println("Button " + (index + 1) + " was clicked.");
+	                if(index == 0) {
+	                	showFirstWord(index);
+	                } else if(index == words.length-1){
+	                	showLastWord(index);
+	                } else {
+	                	showMiddleWord(index);
+	                }
 	            });
 	    	    
 	    	    wordButton.addSelectionListener(new SelectionAdapter() {
 	                @Override
 	                public void widgetSelected(SelectionEvent e) {
-	                	// this
 	                    buttonActions.get(index).run();
 	                }
 	            });
@@ -120,16 +121,19 @@ public class RowTwo {
     }
     
     
-    public void showFirstWord() {
-    	
+    public void showFirstWord(int index) {
+    	System.out.println("First");
+    	System.out.println(index);
     }
     
-    public void showMiddleWord() {
-    	
+    public void showMiddleWord(int index) {
+    	System.out.println("Middle");
+    	System.out.println(index);
     }
     
-    public void lastWord() {
-    	
+    public void showLastWord(int index) {
+    	System.out.println("Last");
+    	System.out.println(index);
     }
 	
     
