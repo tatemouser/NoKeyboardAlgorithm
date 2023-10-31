@@ -24,7 +24,8 @@ public class RowTwo {
 	private Composite leftComp;
 	private Composite rightComp;
 	private String[] vals;
-    private static ArrayList<ArrayList<String>> wordMatchesUIOnly;
+    protected static ArrayList<ArrayList<String>> wordMatchesUIOnly;
+
     
     public void setWordMatchesUIOnly(ArrayList<ArrayList<String>> wordSet) {
     	wordMatchesUIOnly = wordSet;
@@ -75,13 +76,7 @@ public class RowTwo {
 	    	    
 	            buttonActions.add(() -> {
 	                //System.out.println("Button " + (index + 1) + " was clicked.");
-	                if(index == 0) {
-	                	showFirstWord(index);
-	                } else if(index == words.length-1){
-	                	showLastWord(index);
-	                } else {
-	                	showMiddleWord(index);
-	                }
+	            	called(index);
 	            });
 	    	    
 	    	    wordButton.addSelectionListener(new SelectionAdapter() {
@@ -103,7 +98,7 @@ public class RowTwo {
     	rightComp.setBackground(rightCol.getDisplay().getSystemColor(SWT.COLOR_BLACK));
     }
    
-    public void called() {
+    public void called(int index) {
     	// Remove word conversion visuals
         for (Control control : rightComp.getChildren()) {
             control.dispose();
@@ -111,34 +106,23 @@ public class RowTwo {
     	// Create a GridLayout for the rightComp Composite
     	GridLayout gridLayout = new GridLayout(1, false);
     	rightComp.setLayout(gridLayout);
-
-    	// Create three small boxes (Composites)
-    	Composite box1 = new Composite(rightComp, SWT.BORDER);
-    	box1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    	box1.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
     	
+    	// Create three small boxes (Composites)
+    	Composite conversionBox = new Composite(rightComp, SWT.BORDER);
+    	conversionBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    	conversionBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+    	RowTwoSub.fillConversionBox(conversionBox, index); //TODO: differiantiate between the index's, see if index can be public
+    	
+    	Composite totalsBox = new Composite(rightComp, SWT.BORDER);
+    	totalsBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    	totalsBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+        rightComp.layout();
+        
+    	Composite bestScoreBox = new Composite(rightComp, SWT.BORDER);
+    	bestScoreBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    	bestScoreBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
         rightComp.layout();
     }
-    
-    
-    public void showFirstWord(int index) {
-    	System.out.println("First");
-    	System.out.println(index);
-    }
-    
-    public void showMiddleWord(int index) {
-    	System.out.println("Middle");
-    	System.out.println(index);
-    }
-    
-    public void showLastWord(int index) {
-    	System.out.println("Last");
-    	System.out.println(index);
-    }
-	
-    
-    
-    
     
     
     

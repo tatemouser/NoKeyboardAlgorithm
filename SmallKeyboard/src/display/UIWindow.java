@@ -31,7 +31,8 @@ public class UIWindow extends Index {
         int height = shell.getBounds().height;
 
         // Size and center the shell after it's open
-        shell.setSize(screenWidth / 2, screenHeight / 2);
+        shell.setSize(screenWidth * 3 / 4, screenHeight * 3 / 4);
+
         int x = (screenWidth - width) / 2;
         int y = (screenHeight - height) / 2;
         shell.setLocation(x, y);
