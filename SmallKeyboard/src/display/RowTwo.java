@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -111,6 +112,7 @@ public class RowTwo {
     	Composite conversionBox = new Composite(rightComp, SWT.BORDER);
     	conversionBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     	conversionBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+    	
     	RowTwoSub.fillConversionBox(conversionBox, index); //TODO: differiantiate between the index's, see if index can be public
     	
     	Composite totalsBox = new Composite(rightComp, SWT.BORDER);

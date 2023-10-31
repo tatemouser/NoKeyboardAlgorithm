@@ -60,12 +60,12 @@ public class RowOne {
         setText(input, inputData);
     }
 	
-    public void setText(Label input, GridData outputData) {
-        input.setLayoutData(outputData);
+    public void setText(Label input, GridData inputData) {
+        input.setLayoutData(inputData);
         input.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
     }
 
-    
+
     public void setBackgroundColor(int swtColorConstant) {
         if (parentComposite != null) {
             // Use Display.getCurrent().getSystemColor to get the color based on the SWT constant

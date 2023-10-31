@@ -58,7 +58,6 @@ public class LinkingMatchesAndBigram {
 			// Stores best pick.
 			baseWordScores.add(BigramMain.getAfterWordScore(baseWord, option));
 		}
-		
 		// Compare top scores. Finds score that is smallest value / No repeating 9's / Standard notation 
 		double min = Double.MAX_VALUE;
 		int bestScoreIndex = 0;
