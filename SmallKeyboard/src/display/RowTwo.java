@@ -54,7 +54,7 @@ public class RowTwo {
     	
     	Label leftTitle = new Label(leftComp, SWT.NONE);
     	leftTitle.setText("Show Conversions:");	
-    	leftTitle.setBackground(parentComposite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    	leftTitle.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_GRAY)); 
     }
     
     public void addButton() {
@@ -111,19 +111,19 @@ public class RowTwo {
     	// Create three small boxes (Composites)
     	Composite conversionBox = new Composite(rightComp, SWT.BORDER);
     	conversionBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    	conversionBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+    	conversionBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GRAY));
     	
     	RowTwoSub.fillConversionBox(conversionBox, index); //TODO: differiantiate between the index's, see if index can be public
     	
     	Composite totalsBox = new Composite(rightComp, SWT.BORDER);
     	totalsBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    	totalsBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+    	totalsBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GRAY));
     	RowTwoSub.fillTotalsBox(totalsBox, index);
         rightComp.layout();
         
     	Composite bestScoreBox = new Composite(rightComp, SWT.BORDER);
     	bestScoreBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    	bestScoreBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+    	bestScoreBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GRAY));
         rightComp.layout();
     }
     

@@ -22,7 +22,7 @@ public class RowTwoSub extends RowTwo {
 	    GridData gridData = new GridData(SWT.CENTER, SWT.TOP, true, false);
 	    gridData.verticalIndent = 0; 
 	    label.setLayoutData(gridData);
-	    if(markUp) label.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_YELLOW)); // Change the color as needed
+	    if(markUp) label.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_YELLOW)); 
 	}
 
 	

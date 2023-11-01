@@ -74,11 +74,11 @@ public class UIWindow extends Index {
 	    	parentComposite.setLayout(new GridLayout(1, false));
 	    	
         RowOne rowOne = new RowOne(parentComposite);
-        rowOne.setBackgroundColor(SWT.COLOR_RED);
+        rowOne.setBackgroundColor(SWT.COLOR_WHITE);
         
         
         UIWindow.rowTwo = new RowTwo(parentComposite);
-        rowTwo.setBackgroundColor(SWT.COLOR_YELLOW);
+        rowTwo.setBackgroundColor(SWT.COLOR_GRAY);
     	
     	
     	shell.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));

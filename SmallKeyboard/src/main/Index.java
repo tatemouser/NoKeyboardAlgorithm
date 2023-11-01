@@ -203,7 +203,7 @@ public class Index {
 		LinkingMatchesAndBigram findMatches = new LinkingMatchesAndBigram(wordMatches);
 		String result = findMatches.getResult();
 		output[2] = result;
-		
+
 		// Clear for future inputs //TODO: Could be used to display options that it is choosing in UI
 		wordMatches.clear();
 		return output;
