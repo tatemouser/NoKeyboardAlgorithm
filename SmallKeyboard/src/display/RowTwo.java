@@ -118,6 +118,7 @@ public class RowTwo {
     	Composite totalsBox = new Composite(rightComp, SWT.BORDER);
     	totalsBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     	totalsBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+    	RowTwoSub.fillTotalsBox(totalsBox, index);
         rightComp.layout();
         
     	Composite bestScoreBox = new Composite(rightComp, SWT.BORDER);
