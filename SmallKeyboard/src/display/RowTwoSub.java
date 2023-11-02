@@ -10,10 +10,17 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class RowTwoSub extends RowTwo {
+import bigramLanguageModel.BigramMain;
 
+public class RowTwoSub extends RowTwo {
+	public static ArrayList<Double> scores = new ArrayList<Double>();
+	
 	public RowTwoSub(Composite parent) {
 		super(parent);
+	}
+
+	public static void add(Double score) {
+		scores.add(score);
 	}
 	
 	private static void createStackedLabel(Composite parent, String text, boolean markUp) {
@@ -107,8 +114,11 @@ public class RowTwoSub extends RowTwo {
 	
 	public static String getString(int indexOfCol, int indexInCol) {
 		String result = "";
+        ArrayList<Double> scores = BigramMain.scoresForGUI;
+        System.out.println(scores.size());
 		if(indexOfCol == 0) {
 			for(String i: wordMatchesUIOnly.get(indexOfCol+1)) {
+				int score = 0;
 				result += wordMatchesUIOnly.get(indexOfCol).get(indexInCol) + " + " + i + " \n";
 			}
 		} else {

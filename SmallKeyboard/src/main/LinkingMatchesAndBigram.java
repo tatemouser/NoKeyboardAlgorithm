@@ -8,7 +8,7 @@ public class LinkingMatchesAndBigram {
 	private static ArrayList<ArrayList<String>> wordMatches = new ArrayList<>();
 	private static ArrayList<Double> baseWordScores = new ArrayList<>();
 	private static boolean beenNormalized = false;
-
+	
 	public LinkingMatchesAndBigram(ArrayList<ArrayList<String>> passed) {
 		LinkingMatchesAndBigram.wordMatches = passed;
 	}
@@ -17,6 +17,8 @@ public class LinkingMatchesAndBigram {
 	 * Iterate first word combinations -> Find best 2nd word to match with EACH first word -> Compare all best matches.
 	 * @return Best word match by comparing 2nd to 1st word combination.
 	 */
+	
+	
 	public String firstWord() {
 		if(wordMatches.size() > 1) {
 			// Gets one best match for each base word being the first word.
@@ -61,6 +63,7 @@ public class LinkingMatchesAndBigram {
 		// Compare top scores. Finds score that is smallest value / No repeating 9's / Standard notation 
 		double min = Double.MAX_VALUE;
 		int bestScoreIndex = 0;
+
 		for(int i = 0; i < baseWordScores.size(); i++) {
 			// Interpret bigram score results for most accurate return.
 			if(noRepeatingNine(baseWordScores.get(i)) && baseWordScores.get(i) < min && !isScientificNotation(baseWordScores.get(i))) {
@@ -70,6 +73,7 @@ public class LinkingMatchesAndBigram {
 		}
 		
 		baseWordScores.clear();
+
 		return wordMatches.get(solveForIndex).get(optionBestIndex.get(bestScoreIndex));
 	}
 	

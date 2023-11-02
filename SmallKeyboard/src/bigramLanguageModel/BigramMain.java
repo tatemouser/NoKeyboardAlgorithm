@@ -7,6 +7,7 @@ import java.util.*;
 public class BigramMain {
 	public static BigramLanguageModel lm; // Static instance of the BigramLanguageModel class for language modeling
 	static Random r = new Random(); // Static instance of the Random class for generating random numbers
+	public static ArrayList<Double> scoresForGUI = new ArrayList<Double>();
 	
 	// Reads and processes wikitext data from a file
 	public static List<List<String>> readWikitext(String path, int maxLines) {
@@ -165,11 +166,19 @@ public class BigramMain {
 	
 	
 	// Following two classes used in in LinkingMatchesAndBigram for comparing best results.
-	public static double getPriorWordScore(String option, String base) { 
-	  return lm.getProbability(option, base);
+	public static double getPriorWordScore(String option, String base) {
+		Double val = lm.getProbability(option, base);
+		scoresForGUI.add(val);
+		System.out.println(1 + " " + option + " " + base);
+		return val;
+	  //return lm.getProbability(option, base);
 	}
 	public static double getAfterWordScore(String base, String option) {
-		return lm.getProbability(base, option);
+		Double val = lm.getProbability(base, option);
+		scoresForGUI.add(val);
+		//return lm.getProbability(base, option);
+		System.out.println(2 + " " + base + " " +option);
+		return val;
 	}
 	
 	// Used in LinkingMatchesAndBigram class for testing.
