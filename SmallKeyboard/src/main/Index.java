@@ -3,7 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import bigramLanguageModel.*;
 import sorting.Trie;
 import testing.*;
 import display.*;
@@ -216,7 +215,7 @@ public class Index {
 		run = new UIWindow();
 		run.run();
 
-		// Following is for console input implementation
+		// Following is for console input implementation opened after user interface closes.
 		String mode = "";
 		Boolean restart = true;
 		

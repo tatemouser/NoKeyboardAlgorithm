@@ -1,21 +1,14 @@
 package display;
 
-import java.util.ArrayList;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Composite;
 
 import main.Index;
 
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 public class UIWindow extends Index {
 	//TODO: Fix multiple clicks of button, removing old buttons
@@ -42,6 +35,18 @@ public class UIWindow extends Index {
         shell.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_GRAY));
     }
     
+    
+    // Fetch new conversion results upon pressing enter
+    public static void updateWindow() {
+    	rowTwo.setWordMatchesUIOnly(wordMatchesUIOnly);    	
+    	rowTwo.addButton();
+    }
+    
+    // Needed to pass new conversion values from Index main package to RowTow displays
+    public static void passVals(String[] vals) {
+    	rowTwo.getVals(vals);
+    }
+    
     // Loop to keep shell open
     public void initializeShell() {
         shell.open();
@@ -53,37 +58,28 @@ public class UIWindow extends Index {
         display.dispose();
         System.out.println("Display Closed");
     }
-    
-    public static void updateWindow() {
-    	rowTwo.setWordMatchesUIOnly(wordMatchesUIOnly);    	
-    	rowTwo.addButton();
-    }
-    
-    public static void passVals(String[] vals) {
-    	rowTwo.getVals(vals);
-    }
 
     public void run() {
     	setShell();
-
     	shell.setLayout(new GridLayout(1, false));    	
     	
+    	
     	Composite parentComposite = new Composite(shell, SWT.FLAT);
-    	GridData parentGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+    		GridData parentGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 	    	parentComposite.setLayoutData(parentGridData);
 	    	parentComposite.setLayout(new GridLayout(1, false));
 	    	
         RowOne rowOne = new RowOne(parentComposite);
-        rowOne.setBackgroundColor(SWT.COLOR_WHITE);
+        	rowOne.setBackgroundColor(SWT.COLOR_WHITE);
+     
         
-        
+        // Independent class, since only needed upon pressing enter. *Different implementation for different inputs*
         UIWindow.rowTwo = new RowTwo(parentComposite);
         rowTwo.setBackgroundColor(SWT.COLOR_GRAY);
     	
     	
-    	shell.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-
         
+    	shell.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
         initializeShell();
     }
 }
