@@ -13,7 +13,7 @@ public class BigramLanguageModel {
   * if there is an inner map associated with it, then you can look into that inner map to check if "pie" 
   * is one of the keys. If it is, you retrieve the count of "apple pie" occurrences.
   */
-	
+	 
   // Store counts of bigrams: Map<PreviousWord, Map<NextWord, Count>>
   public final Map<String, Map<String, Integer>> bigramCounts;
 
