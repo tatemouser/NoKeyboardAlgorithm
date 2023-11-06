@@ -112,18 +112,18 @@ public class RowTwo {
     	Composite conversionBox = new Composite(rightComp, SWT.BORDER);
     	conversionBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     	conversionBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GRAY));
-    	
     	RowTwoSub.fillConversionBox(conversionBox, index); //TODO: differiantiate between the index's, see if index can be public
     	
     	Composite totalsBox = new Composite(rightComp, SWT.BORDER);
     	totalsBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     	totalsBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GRAY));
     	RowTwoSub.fillTotalsBox(totalsBox, index);
-        rightComp.layout();
+        //rightComp.layout();
         
     	Composite bestScoreBox = new Composite(rightComp, SWT.BORDER);
     	bestScoreBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     	bestScoreBox.setBackground(rightComp.getDisplay().getSystemColor(SWT.COLOR_GRAY));
+    	RowTwoSub.fillBestScoreBox(bestScoreBox, vals[2], index);
         rightComp.layout();
     }
     

@@ -169,7 +169,6 @@ public class BigramMain {
 	public static double getPriorWordScore(String option, String base) {
 		Double val = lm.getProbability(option, base);
 		scoresForGUI.add(val);
-		System.out.println(1 + " " + option + " " + base);
 		return val;
 	  //return lm.getProbability(option, base);
 	}
@@ -177,7 +176,6 @@ public class BigramMain {
 		Double val = lm.getProbability(base, option);
 		scoresForGUI.add(val);
 		//return lm.getProbability(base, option);
-		System.out.println(2 + " " + base + " " +option);
 		return val;
 	}
 	

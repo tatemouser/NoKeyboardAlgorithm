@@ -115,7 +115,6 @@ public class RowTwoSub extends RowTwo {
 	public static String getString(int indexOfCol, int indexInCol) {
 		String result = "";
         ArrayList<Double> scores = BigramMain.scoresForGUI;
-        System.out.println(scores.size());
 		if(indexOfCol == 0) {
 			for(String i: wordMatchesUIOnly.get(indexOfCol+1)) {
 				int score = 0;
@@ -135,7 +134,6 @@ public class RowTwoSub extends RowTwo {
 		gridLayout.verticalSpacing = 0; // Adjust the vertical spacing as needed
 
 		totalsBox.setLayout(gridLayout);
-	    System.out.println(wordMatchesUIOnly.get(index).size() + " size is here");
 
 		for(int i = 0; i < wordMatchesUIOnly.get(index).size(); i++) {
 			Composite wordSpaceOne = new Composite(totalsBox, SWT.BORDER);
@@ -156,6 +154,43 @@ public class RowTwoSub extends RowTwo {
 			wordSpaceOne.setLayoutData(gridDataOne);
 		}
 		totalsBox.layout();
+	}
+	
+	public static void fillBestScoreBox(Composite bestScoreBox, String sentence, int index) {
+        String[] words = sentence.split(" ");
 
+        GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.verticalSpacing = 0; // Adjust the vertical spacing as needed
+		gridLayout.horizontalSpacing = 10;
+		bestScoreBox.setLayout(gridLayout);
+
+		Composite wordSpaceOne = new Composite(bestScoreBox, SWT.BORDER);
+		GridData gridDataOne = new GridData(SWT.BEGINNING, SWT.BEGINNING, false, true);
+
+		Composite wordSpaceTwo = new Composite(bestScoreBox, SWT.BORDER);
+		GridData gridDataTwo = new GridData(SWT.BEGINNING, SWT.BEGINNING, false, true);
+		
+		wordSpaceOne.setLayout(new GridLayout());
+		wordSpaceTwo.setLayout(new GridLayout());
+
+		
+		if(index < words.length-1) { 
+			createStackedLabel(wordSpaceOne, words[index], false);
+			createStackedLabel(wordSpaceTwo, words[index+1], false);
+		} else {
+			createStackedLabel(wordSpaceOne, words[index-1], false);
+			createStackedLabel(wordSpaceTwo, words[index], false);
+		}
+
+		
+		gridDataOne.widthHint = 50; 
+		gridDataOne.heightHint = 25; 
+		wordSpaceOne.setLayoutData(gridDataOne);
+		gridDataTwo.widthHint = 50; 
+		gridDataTwo.heightHint = 25;
+		wordSpaceTwo.setLayoutData(gridDataTwo);
+		
+        bestScoreBox.layout();
+	    
 	}
 }
