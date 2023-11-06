@@ -34,6 +34,7 @@ If "7970317" is entered. NumToWord finds word combinations for 797 and 317, then
 ## Features
 - Dictionary stored in Trie data structure. (25,000 words)
 - Word to number and number to word algorithm.
+- User interface built with standard widget toolkit
 - Bigram language model used to get relational score between two words.
 - Enhanced prediction, comparing multiple iterations of scores from pairwise combinations.
 - Writing over CSV file.
