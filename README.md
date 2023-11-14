@@ -25,6 +25,15 @@ By entering 73999, the ideal output would be "hello". Although it would produce 
 
 <img src="https://github.com/tatemouser/NoKeyboardAlgorithm/assets/114375692/a4a03227-d414-4729-b8a6-caeb95af825c" alt="keyboardImage" width="500" height="200">
 
+#### User Interface
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://raw.githubusercontent.com/tatemouser/NoKeyboardAlgorithm/main/SmallKeyboard/images/UIOne.png" alt="keyboardImage" width="500" height="300">
+    <img src="https://raw.githubusercontent.com/tatemouser/NoKeyboardAlgorithm/main/SmallKeyboard/images/UIShow.png" alt="keyboardImage" width="500" height="300">
+</div>
+
+
+##### Further Conversion Explanation
 If "7970317" is entered. NumToWord finds word combinations for 797 and 317, then operations will perform as seen below. 
 
 ![diagramBigram](https://github.com/tatemouser/NoKeyboardAlgorithm/assets/114375692/b5934545-0fe2-49b3-9ad6-bab022a67735)
@@ -59,6 +68,11 @@ sorting:
 bigramLanguageModel:
 &nbsp;&nbsp;&nbsp;BigramLanguageModel trains and builds the data structure.
 &nbsp;&nbsp;&nbsp;BigramMain relays information from the data structure. </pre>
+
+<pre>
+display:
+&nbsp;&nbsp;&nbsp;UIWindow creates window and links main conversion to update display 
+&nbsp;&nbsp;&nbsp;Other classes represent regions of window named accordingly </pre>
 
 <pre> 
 testing: 
